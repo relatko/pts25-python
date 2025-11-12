@@ -20,7 +20,6 @@ class GridPosition:
 
     def __str__(self) -> str:
         return "("+str(self._x)+","+str(self._y)+")"
-        
 class Resource(Enum):
     GREEN = 1
     RED = 2
@@ -30,20 +29,16 @@ class Resource(Enum):
     CAR =6
     MONEY = 7
     POLUTION = 8
-    
 class Deck(Enum):
     I = 1
     II = 2
-
 class CardSource:
     _deck: Deck
     _index: int
-
     def __init__(self, deck: Deck, index : int):
         assert index >= 0, "Index CardSource init less 0"      
         self._deck = deck
         self._index = index
-
     @property
     def deck(self) -> Deck:
         return self._deck
@@ -60,8 +55,6 @@ class CardSource:
     def index(self,value: int) -> None:
         assert value >= 0, "Index CardSource less 0 setter"      
         self._index = value
-
-
 class GameState(Enum):
     TAKE_CARD_NO_CARD_DISCARDED = 1
     TAKE_CARD_CARD_DISCARDED = 2
