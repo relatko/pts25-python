@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional
 from enum import Enum
-from collections import Counter
 
 class GridPosition:
     _x: int
@@ -46,7 +44,7 @@ class CardSource:
     _index: int
 
     def __init__(self, deck: Deck, index : int):
-        assert index >= 0, "Index CardSource init less 0"      
+        assert index >= 0, "Index CardSource init less 0"
         self._deck = deck
         self._index = index
 
@@ -64,7 +62,7 @@ class CardSource:
 
     @index.setter
     def index(self,value: int) -> None:
-        assert value >= 0, "Index CardSource less 0 setter"      
+        assert value >= 0, "Index CardSource less 0 setter"
         self._index = value
 
 class GameState(Enum):
@@ -84,12 +82,12 @@ class Points:
     def __str__(self) -> str:
         return f"{self.value} VP"
 
-    def __add__(self, other):
+    def __add__(self, other) -> Points:
         if isinstance(other, Points):
             return Points(self.value + other.value)
         return Points(self.value + other)
 
-    def __sub__(self, other):
+    def __sub__(self, other) -> Points:
         if isinstance(other, Points):
             return Points(self.value - other.value)
         return Points(self.value - other)

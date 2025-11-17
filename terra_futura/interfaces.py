@@ -1,12 +1,12 @@
 # pylint: disable=unused-argument, duplicate-code
 from __future__ import annotations
-from typing import List , Optional , Tuple
+from typing import List , Tuple
 
 
 class InterfaceActivateGrid:
     def set_activation_pattern(self, pattern: List[Tuple[int, int]]) -> None:
         assert False
-        
+
 class TerraFuturaObserverInterface:
-    def notify(self, gameState: str) -> None:
+    def notify(self, game_state: str) -> None:
         assert False
