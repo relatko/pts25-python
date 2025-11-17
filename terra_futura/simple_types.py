@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum
+from typing import Union
 
 class GridPosition:
     _x: int
@@ -82,12 +83,12 @@ class Points:
     def __str__(self) -> str:
         return f"{self.value} VP"
 
-    def __add__(self, other: Points or int) -> Points:
+    def __add__(self, other: Union[Points, int]) -> Points:
         if isinstance(other, Points):
             return Points(self.value + other.value)
         return Points(self.value + other)
 
-    def __sub__(self, other:Points or int) -> Points:
+    def __sub__(self, other: Union[Points, int]) -> Points:
         if isinstance(other, Points):
             return Points(self.value - other.value)
         return Points(self.value - other)
