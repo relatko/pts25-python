@@ -82,12 +82,12 @@ class Points:
     def __str__(self) -> str:
         return f"{self.value} VP"
 
-    def __add__(self, other) -> Points:
+    def __add__(self, other: Points or int) -> Points:
         if isinstance(other, Points):
             return Points(self.value + other.value)
         return Points(self.value + other)
 
-    def __sub__(self, other) -> Points:
+    def __sub__(self, other:Points or int) -> Points:
         if isinstance(other, Points):
             return Points(self.value - other.value)
         return Points(self.value - other)
