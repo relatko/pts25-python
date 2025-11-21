@@ -6,7 +6,7 @@ from terra_futura.simple_types import Resource, Points
 
 class TestScoringMethod(unittest.TestCase):
 
-    def test_ignores_money_and_pollution_in_available_resources(self):
+    def test_ignores_money_and_pollution_in_available_resources(self) -> None:
         method = ScoringMethod(
             resources=[Resource.GREEN, Resource.RED],
             points_per_combination=Points(5)
@@ -16,13 +16,13 @@ class TestScoringMethod(unittest.TestCase):
             Resource.GREEN,
             Resource.RED,
             Resource.MONEY,       # ignored
-            Resource.POLLUTION    # ignored
+            Resource.POLUTION    # ignored
         ]
 
         result = method.select_this_method_and_calculate(available)
         self.assertEqual(result.value, 5)
 
-    def test_counts_only_complete_sets(self):
+    def test_counts_only_complete_sets(self) -> None:
         method = ScoringMethod(
             resources=[Resource.GREEN, Resource.YELLOW],
             points_per_combination=Points(3)
@@ -37,7 +37,7 @@ class TestScoringMethod(unittest.TestCase):
         result = method.select_this_method_and_calculate(available)
         self.assertEqual(result.value, 3)
 
-    def test_multiple_sets(self):
+    def test_multiple_sets(self) -> None:
         method = ScoringMethod(
             resources=[Resource.BULB, Resource.GEAR],
             points_per_combination=Points(4)
@@ -51,7 +51,7 @@ class TestScoringMethod(unittest.TestCase):
         result = method.select_this_method_and_calculate(available)
         self.assertEqual(result.value, 8)
 
-    def test_repeated_required_resources(self):
+    def test_repeated_required_resources(self) -> None:
         method = ScoringMethod(
             resources=[Resource.GREEN, Resource.GREEN, Resource.RED],
             points_per_combination=Points(7)
@@ -65,7 +65,7 @@ class TestScoringMethod(unittest.TestCase):
         result = method.select_this_method_and_calculate(available)
         self.assertEqual(result.value, 7)
 
-    def test_zero_sets_when_missing_resource(self):
+    def test_zero_sets_when_missing_resource(self) -> None:
         method = ScoringMethod(
             resources=[Resource.CAR, Resource.GEAR],
             points_per_combination=Points(10)
@@ -78,7 +78,7 @@ class TestScoringMethod(unittest.TestCase):
         result = method.select_this_method_and_calculate(available)
         self.assertEqual(result.value, 0)
 
-    def test_state_before_and_after(self):
+    def test_state_before_and_after(self) -> None:
         method = ScoringMethod(
             resources=[Resource.GREEN, Resource.RED],
             points_per_combination=Points(4)
@@ -97,4 +97,3 @@ class TestScoringMethod(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
