@@ -1,6 +1,6 @@
 # pylint: disable=unused-argument, duplicate-code
 from typing import List, Tuple, Optional, Protocol
-from terra_futura.simple_types import GridPosition, Resource
+from terra_futura.simple_types import *
 
 # Zostalo z pôvodného...
 class InterfaceActivateGrid(Protocol):
