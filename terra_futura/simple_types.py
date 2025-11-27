@@ -67,4 +67,11 @@ class Points:
     def amount(self) -> int:
         return self._amount
     
-    
+class GameState(Enum):
+    TakeCardNoCardDiscarded = auto()
+    TakeCardCardDiscarded = auto()
+    ActivateCard = auto()
+    SelectReward = auto()
+    SelectActivationPattern = auto()
+    SelectScoringMethod = auto()
+    Finish = auto()
