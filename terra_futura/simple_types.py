@@ -18,7 +18,7 @@ class GridPosition:
 
     def __str__(self) -> str:
         return "("+str(self._x)+","+str(self._x)+")"
-    
+
 class Resource(Enum):
     GREEN = auto()
     RED = auto()
