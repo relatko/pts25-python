@@ -46,16 +46,22 @@ class Deck(Enum):
 
 
 class CardSource(Enum):
-    DISPLAY_LEVEL_I_0 = auto()
-    DISPLAY_LEVEL_I_1 = auto()
-    DISPLAY_LEVEL_I_2 = auto()
-    DISPLAY_LEVEL_I_3 = auto()
-    DISPLAY_LEVEL_II_0 = auto()
-    DISPLAY_LEVEL_II_1 = auto()
-    DISPLAY_LEVEL_II_2 = auto()
-    DISPLAY_LEVEL_II_3 = auto()
-    DECK_LEVEL_I = auto()
-    DECK_LEVEL_II = auto()
+    _deck: Deck
+    _index: int
+
+    def __init__(self, deck:Deck, index:  int):
+        self._deck = deck
+        self._index = index
+
+    @property
+    def deck(self) -> Deck:
+        return self._deck
+    
+    @property
+    def index(self) -> int:
+        return self._index
+    
+    
 
 class Points:
     _amount: int
