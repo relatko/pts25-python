@@ -19,7 +19,7 @@ class ScoringMethod:
         required = Counter(self.resources)
 
         available = Counter(r for r in available_resources
-                            if r not in [Resource.MONEY, Resource.POLUTION])
+                            if r not in [Resource.MONEY, Resource.POLLUTION])
 
         if not required:
             num_complete_sets = 0
