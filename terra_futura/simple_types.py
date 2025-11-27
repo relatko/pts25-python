@@ -1,3 +1,5 @@
+from enum import Enum, auto
+
 class GridPosition:
     _x: int
     _y: int
@@ -16,3 +18,16 @@ class GridPosition:
 
     def __str__(self) -> str:
         return "("+str(self._x)+","+str(self._x)+")"
+    
+class Resource(Enum):
+    GREEN = auto()
+    RED = auto()
+    YELLOW = auto()
+    BULB = auto()
+    GEAR = auto()
+    CAR = auto()
+    MONEY = auto()
+    POLUTION = auto()
+
+    def str(self) -> str:
+        return self.name
