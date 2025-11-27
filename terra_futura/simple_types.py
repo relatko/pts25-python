@@ -57,4 +57,14 @@ class CardSource(Enum):
     DECK_LEVEL_I = auto()
     DECK_LEVEL_II = auto()
 
+class Points:
+    _amount: int
+
+    def __init__(self, amount: int):
+        self._amount = amount
+
+    @property
+    def amount(self) -> int:
+        return self._amount
+    
     
