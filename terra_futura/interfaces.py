@@ -1,27 +1,32 @@
 # pylint: disable=unused-argument, duplicate-code
-from typing import List, Tuple, Optional
+from typing import List, Tuple, Optional, Protocol
 from terra_futura.simple_types import GridPosition, Resource
 
-
-class InterfaceActivateGrid:
+# Zostalo z pôvodného...
+class InterfaceActivateGrid(Protocol):
     def set_activation_pattern(self, pattern: List[Tuple[int, int]]) -> None:
-        assert False
+        ...
 
-class InterfaceGrid:
-    def putCard(self, coordinate : GridPosition, card: InterfaceCard) -> bool:
-        assert False
+# Card
+class InterfaceCard(Protocol):
+    def canGetResources(self, resources: List[Resource]) -> bool:
+        ...
 
-class InterfaceMoveCard:
+# Pile
+class InterfacePile(Protocol):
+    def getCard(self, index:int) ->Optional[InterfaceCard]:
+        ...
+
+# Grid
+class InterfaceGrid(Protocol):
+    def putCard(self, coordinate : GridPosition, card: InterfaceCard) -> None:
+        ...
+
+# MoveCard
+class InterfaceMoveCard(Protocol):
     """Interface for MoveCard"""
-    def moveCard(pile: InterfacePile, gridCoordinate: GridPosition, grid: InterfaceGrid) ->bool:
-        assert False
+    def moveCard(self, pile: InterfacePile, gridCoordinate: GridPosition, grid: InterfaceGrid) ->bool:
+        ...
         
-class InterfacePile:
-    def getCard(index:int) ->Optional[InterfaceCard]:
-        assert False
-
-class InterfaceCard:
-    def canGetResources(resources: List[Resource]) -> bool:
-        assert False
 
     # treba implementovať zvyšok ...
