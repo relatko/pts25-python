@@ -32,7 +32,7 @@ class InterfaceCard:
 
     def check(
             self,
-            input: List["Resource"],
+            inputs: List["Resource"],
             output: List["Resource"],
             pollution: int
     ) -> bool:
@@ -40,7 +40,7 @@ class InterfaceCard:
 
     def check_lower(
             self,
-            input: List["Resource"],
+            inputs: List["Resource"],
             output: List["Resource"],
             pollution: int
     ) -> bool:
