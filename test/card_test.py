@@ -1,33 +1,124 @@
 import unittest
-from terra_futura.card import Card, CardEffects
+import json
+
+from terra_futura.card import Card
 from terra_futura.simple_types import Resource
+from terra_futura.effects import (
+    EffectTransformationFixed,
+    EffectArbitraryBasic,
+    EffectOr
+)
 
 
-class TestCard(unittest.TestCase):
+class TestCardBasics(unittest.TestCase):
 
-    def test_can_get_resources_success(self) -> None:
-        card = Card([Resource.GREEN, Resource.RED], pollutionSpacesL=2)
-        self.assertTrue(card.can_get_resources([Resource.GREEN]))
+    def test_can_get_resources_valid(self):
+        card = Card([Resource.RED, Resource.GREEN], 5)
+        self.assertTrue(card.can_get_resources([Resource.RED]))
 
-    def test_can_get_resources_fail(self) -> None:
-        card = Card([Resource.GREEN], pollutionSpacesL=2)
-        self.assertFalse(card.can_get_resources([Resource.RED]))
+    def test_can_get_resources_invalid(self):
+        card = Card([Resource.RED], 5)
+        self.assertFalse(card.can_get_resources([Resource.GREEN]))
 
-    def test_get_resources_removes_them(self)-> None:
-        card = Card([Resource.GREEN, Resource.RED], pollutionSpacesL=2)
-        card.get_resources([Resource.GREEN])
-        self.assertEqual(card.resources, [Resource.RED])
+    def test_get_resources(self):
+        card = Card([Resource.RED, Resource.GREEN], 5)
+        card.get_resources([Resource.RED])
+        self.assertEqual(card.resources, [Resource.GREEN])
 
-    def test_put_resources_limited_by_pollution(self)-> None:
-        card = Card([Resource.POLLUTION], pollutionSpacesL=1)
+    def test_get_resources_error(self):
+        card = Card([Resource.GREEN], 5)
         with self.assertRaises(ValueError):
-            card.put_resources([Resource.POLLUTION])
+            card.get_resources([Resource.RED])
 
-    def test_check_with_pollution(self)-> None:
-        effect = CardEffects(pollution=1)
-        card = Card([Resource.GREEN, Resource.POLLUTION], pollutionSpacesL=3, upperEffect=effect)
-        self.assertTrue(card.check_lower([Resource.GREEN], [], 0))
+    def test_can_put_resources_respects_pollution_limit(self):
+        card = Card([Resource.GREEN], pollutionSpacesL=1)
+        self.assertTrue(card.can_put_resources([Resource.GREEN]))
+        self.assertFalse(card.can_put_resources([Resource.POLLUTION, Resource.POLLUTION]))
 
-    def test_check_lower_always_ignores_pollution(self)-> None:
-        card = Card([Resource.GREEN], pollutionSpacesL=0)
-        self.assertTrue(card.check_lower([Resource.GREEN], [], 999))
+    def test_put_resources(self):
+        card = Card([Resource.GREEN], pollutionSpacesL=2)
+        card.put_resources([Resource.POLLUTION])
+        self.assertIn(Resource.POLLUTION, card.resources)
+
+
+class TestCardWithEffects(unittest.TestCase):
+
+    def test_check_upper_transformation_fixed_valid(self):
+        effect = EffectTransformationFixed(
+            [Resource.RED], [Resource.MONEY], pollution=0
+        )
+        card = Card([Resource.RED], 5, upperEffect=effect)
+        self.assertTrue(card.check(
+            inputs=[Resource.RED],
+            output=[Resource.MONEY],
+            pollution=0
+        ))
+
+    def test_check_upper_transformation_fixed_invalid(self):
+        effect = EffectTransformationFixed(
+            [Resource.RED], [Resource.MONEY], pollution=0
+        )
+        card = Card([Resource.RED], 5, upperEffect=effect)
+
+        self.assertFalse(card.check(
+            inputs=[Resource.GREEN],
+            output=[Resource.MONEY],
+            pollution=0
+        ))
+
+    def test_check_lower_arbitrary_basic_valid(self):
+        effect = EffectArbitraryBasic(
+            2, [Resource.MONEY], pollution=0
+        )
+        card = Card([Resource.RED, Resource.GREEN], 5, lowerEffect=effect)
+        self.assertTrue(card.check_lower(
+            inputs=[Resource.RED, Resource.GREEN],
+            output=[Resource.MONEY],
+            pollution=0
+        ))
+
+    def test_check_lower_arbitrary_basic_invalid(self):
+        effect = EffectArbitraryBasic(
+            2, [Resource.MONEY], pollution=0
+        )
+        card = Card([Resource.RED, Resource.GREEN], 5, lowerEffect=effect)
+        self.assertFalse(card.check_lower(
+            inputs=[Resource.RED],
+            output=[Resource.MONEY],
+            pollution=0
+        ))
+
+class TestCardOrEffect(unittest.TestCase):
+
+    def test_or_effect(self):
+        e1 = EffectTransformationFixed([Resource.RED], [Resource.GREEN], pollution=0)
+        e2 = EffectArbitraryBasic(1, [Resource.MONEY], pollution=0)
+        effect_or = EffectOr([e1, e2])
+        card = Card([Resource.RED], 5, upperEffect=effect_or)
+        self.assertTrue(card.check(
+            inputs=[Resource.RED],
+            output=[Resource.GREEN],
+            pollution=0
+        ))
+        self.assertTrue(card.check(
+            inputs=[Resource.YELLOW],
+            output=[Resource.MONEY],
+            pollution=0
+        ))
+        self.assertFalse(card.check(
+            inputs=[Resource.GREEN],
+            output=[Resource.YELLOW],
+            pollution=0
+        ))
+
+class TestCardState(unittest.TestCase):
+
+    def test_state_serialization(self):
+        effect = EffectTransformationFixed([Resource.RED], [Resource.GREEN], pollution=0)
+        card = Card([Resource.RED, Resource.GREEN], 3, True, effect, None)
+        state = json.loads(card.state())
+        self.assertEqual(state["resources"], ["Red", "Green"])
+        self.assertEqual(state["pollution_limit"], 3)
+        self.assertTrue(state["assistance"])
+        self.assertEqual(state["upper_effect"]["type"], "fixed")
+        self.assertIsNone(state["lower_effect"])
