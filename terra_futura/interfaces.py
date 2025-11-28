@@ -60,7 +60,7 @@ class ObserverInterface:
 class InterfaceEffect:
     def check(
         self,
-        input: List["Resource"],
+        inputs: List["Resource"],
         output: List["Resource"],
         pollution: int,
     ) -> bool:
