@@ -1,8 +1,9 @@
 # pylint: disable=unused-argument, duplicate-code, redefined-builtin
-from typing import List, Tuple, TYPE_CHECKING
+from typing import List, Tuple, TYPE_CHECKING, Optional
+from terra_futura.simple_types import GridPosition, CardSource
 from terra_futura.simple_types import Resource
 if TYPE_CHECKING:
-    from terra_futura.card import CardEffects
+    from terra_futura.card import Card
 
 
 class InterfaceActivateGrid:
@@ -31,18 +32,18 @@ class InterfaceCard:
         raise NotImplementedError
 
     def check(
-        self,
-        input: List["Resource"],
-        output: List["Resource"],
-        pollution: int,
+            self,
+            input: List["Resource"],
+            output: List["Resource"],
+            pollution: int
     ) -> bool:
         raise NotImplementedError
 
     def check_lower(
-        self,
-        input: List["Resource"],
-        output: List["Resource"],
-        pollution: int,
+            self,
+            input: List["Resource"],
+            output: List["Resource"],
+            pollution: int
     ) -> bool:
         raise NotImplementedError
 
