@@ -23,8 +23,12 @@ class ActivationPattern:
         return self._selected
 
     def state(self) -> str:
+        serializable_pattern = [
+            [pos.x, pos.y] for pos in self._pattern
+        ]
+
         state: Any = {
-            "activations": self._pattern,
+            "activations": serializable_pattern, 
             "selected": self._selected,
         }
         return json.dumps(state)
