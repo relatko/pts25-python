@@ -1,5 +1,5 @@
-from terra_futura.interfaces import InterfaceCard
+from terra_futura.interfaces import InterfaceCard, Resource
+from typing import List
 
-class Card:
-    def __init__(self):
-        pass
+class Card(InterfaceCard):
+    ...
