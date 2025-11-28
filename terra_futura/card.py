@@ -46,13 +46,19 @@ class Card(InterfaceCard):
             raise ValueError("Too much pollution")
         self.resources.extend(resources)
 
-    def check(self, inputs, output, pollution) -> bool:
+    def check(self,
+    inputs: List[Resource],
+    output: List[Resource],
+    pollution: int) -> bool:
         return (
             self.upper_effect is not None and
             self.upper_effect.check(inputs, output, pollution)
         )
 
-    def check_lower(self, inputs, output, pollution) -> bool:
+    def check_lower(self,
+    inputs: List[Resource],
+    output: List[Resource],
+    pollution: int) -> bool:
         return (
             self.lower_effect is not None and
             self.lower_effect.check(inputs, output, pollution)
