@@ -14,28 +14,60 @@ class InterfaceCard(Protocol):
 
 # Pile
 class InterfacePile(Protocol):
+    """Only gives the card information, does not change anything"""
     def getCard(self, index:int) ->Optional[InterfaceCard]:
         ...
 
-    def removeLastCard(self):
+    """Removes card from grid."""
+    def takeCard(self, index: int) -> None:
+        ...
+
+    def removeLastCard(self) -> None:
+        ...
+
+    def state(self)-> str:
         ...
 
 # Grid
 class InterfaceGrid(Protocol):
     def putCard(self, coordinate : GridPosition, card: InterfaceCard) -> None:
         ...
+    
+    def getCard(coordinate: GridPosition)-> Optional[InterfaceCard]:
+        ...
+
+    def canPutCard(coordinate: GridPosition)-> bool:
+        ...
+
+    def putCard(coordinate: GridPosition, card: InterfaceCard) -> bool:
+        ...
+
+    def canBeActivated(coordinate: GridPosition)-> bool:
+        ...
+        
+    def setActivated(coordinate: GridPosition) -> None:
+        ...
+
+    def setActivationPattern(pattern: List[GridPosition]) -> None:
+        ...
+    def endTurn(self) -> None:
+        ...
+
+    def state(self) -> None:
+        ...
+
 
 # MoveCard
 class InterfaceMoveCard(Protocol):
-    """Interface for MoveCard"""
-    def moveCard(self, pile: InterfacePile, gridCoordinate: GridPosition, grid: InterfaceGrid) ->bool:
+    """IMPORTANT! Added cardIndex argument"""
+    def moveCard(self, pile: InterfacePile,cardIndex: int, gridCoordinate: GridPosition, grid: InterfaceGrid) ->bool:
         ...
         
 
     # treba implementovať zvyšok ...
 
 class TerraFuturaInterface(Protocol):
-    def takeCard(self, playerId: int, source: CardSource, destination: GridPosition) -> bool:
+    def takeCard(self, playerId: int, source: CardSource, cardIndex: int, destination: GridPosition) -> bool:
         ...
     
     def discardLastCardFromDeck(self, playerId: int, deck: Deck) -> bool:
@@ -67,3 +99,4 @@ class TerraFuturaObserverInterface(Protocol):
 class GameObserverInterface(Protocol):
     def notifyAll(self, newState: dict[int, str]):
         ...
+
