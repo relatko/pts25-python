@@ -108,7 +108,7 @@ class Game(TerraFuturaInterface):
         self._notifyObservers()
         return True
     
-    def takeCard(self, playerId: int, source: CardSource, destination: GridPosition) -> bool:
+    def takeCard(self, playerId: int, source: CardSource, cardIndex: int, destination: GridPosition) -> bool:
         if not self.isPlayerOnTurn(playerId):
             return False
         
@@ -124,7 +124,7 @@ class Game(TerraFuturaInterface):
         
         grid = self._players[playerId].grid
 
-        if not self._moveCard.moveCard(pile, destination, grid):
+        if not self._moveCard.moveCard(pile, cardIndex, destination, grid):
             return False
         
         self._state = GameState.ActivateCard
