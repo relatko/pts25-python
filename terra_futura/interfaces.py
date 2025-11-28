@@ -17,7 +17,13 @@ class InterfacePile(Protocol):
     def getCard(self, index:int) ->Optional[InterfaceCard]:
         ...
 
-    def removeLastCard(self):
+    def takeCard(self, index: int) -> None:
+        ...
+
+    def removeLastCard(self) -> None:
+        ...
+
+    def state(self)-> str:
         ...
 
 # Grid
@@ -42,10 +48,10 @@ class InterfaceGrid(Protocol):
 
     def setActivationPattern(pattern: List[GridPosition]) -> None:
         ...
-    def endTurn() -> None:
+    def endTurn(self) -> None:
         ...
 
-    def state() -> None:
+    def state(self) -> None:
         ...
 
 
