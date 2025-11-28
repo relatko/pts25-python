@@ -1,5 +1,6 @@
 from __future__ import annotations
 from enum import Enum, auto
+from dataclasses import dataclass
 
 class GridPosition:
     _x: int
@@ -45,33 +46,16 @@ class Deck(Enum):
     LEVEL_II = auto()
 
 
-class CardSource(Enum):
-    _deck: Deck
-    _index: int
-
-    def __init__(self, deck:Deck, index:  int):
-        self._deck = deck
-        self._index = index
-
-    @property
-    def deck(self) -> Deck:
-        return self._deck
-    
-    @property
-    def index(self) -> int:
-        return self._index
+@dataclass(frozen=True)
+class CardSource:
+    deck: Deck
+    index: int
     
     
 
+@dataclass(frozen=True)
 class Points:
-    _amount: int
-
-    def __init__(self, amount: int):
-        self._amount = amount
-
-    @property
-    def amount(self) -> int:
-        return self._amount
+    value: int
     
 class GameState(Enum):
     TakeCardNoCardDiscarded = auto()
