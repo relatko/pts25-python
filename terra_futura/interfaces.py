@@ -56,3 +56,18 @@ class InterfaceCard:
 class ObserverInterface:
     def notify(self, game_state: str) -> None:
         assert False
+
+class InterfaceEffect:
+    def check(
+        self,
+        input: List["Resource"],
+        output: List["Resource"],
+        pollution: int,
+    ) -> bool:
+        raise NotImplementedError
+
+    def hasAssistance(self) -> bool:
+        raise NotImplementedError
+
+    def state(self) -> str:
+        raise NotImplementedError
