@@ -24,7 +24,7 @@ class EffectTransformationFixed:
                 Counter(output) == self._outputs and
                 pollution == self._pollution)
 
-    def hasAssistance(self) -> bool:
+    def has_assistance(self) -> bool:
         return False
 
     def state(self) -> str:
@@ -52,7 +52,7 @@ class EffectArbitraryBasic:
         return (Counter(output) == self._outputs and
                 pollution == self._pollution)
 
-    def hasAssistance(self) -> bool:
+    def has_assistance(self) -> bool:
         return False
 
     def state(self) -> str:
@@ -73,9 +73,9 @@ class EffectOr:
                 return True
         return False
 
-    def hasAssistance(self) -> bool:
+    def has_assistance(self) -> bool:
         for effect in self._effects:
-            if effect.hasAssistance():
+            if effect.has_assistance():
                 return True
         return False
 
@@ -93,7 +93,7 @@ class EffectAssistance:
     def check(self, inputs: List[Resource], output: List[Resource], pollution: int) -> bool:
         return False
 
-    def hasAssistance(self) -> bool:
+    def has_assistance(self) -> bool:
         return True
 
     def state(self) -> str:
@@ -106,7 +106,7 @@ class EffectPollutionTransfer:
     def check(self, inputs: List[Resource], output: List[Resource], pollution: int) -> bool:
         return len(inputs) == 0 and len(output) == 0
 
-    def hasAssistance(self) -> bool:
+    def has_assistance(self) -> bool:
         return False
 
     def state(self) -> str:
