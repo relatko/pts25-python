@@ -11,7 +11,7 @@ RAW_RESOURCES: Set[Resource] = {
     Resource.YELLOW,
 }
 
-class EffectTransformationFixed:
+class EffectTransformationFixed(InterfaceEffect):
     def __init__(self, input_res: List[Resource], output_res: List[Resource], pollution: int):
         self._inputs = Counter(input_res)
         self._outputs = Counter(output_res)
@@ -36,7 +36,7 @@ class EffectTransformationFixed:
         })
 
 
-class EffectArbitraryBasic:
+class EffectArbitraryBasic(InterfaceEffect):
     def __init__(self, from_count: int, output_res: List[Resource], pollution: int):
         self._from_count = from_count
         self._outputs = Counter(output_res)
@@ -63,7 +63,7 @@ class EffectArbitraryBasic:
             "pollution": self._pollution
         })
 
-class EffectOr:
+class EffectOr(InterfaceEffect):
     def __init__(self, effects: List[InterfaceEffect]):
         self._effects = effects
 
@@ -86,7 +86,7 @@ class EffectOr:
             "options": children_states
         })
 
-class EffectAssistance:
+class EffectAssistance(InterfaceEffect):
     def __init__(self) -> None:
         pass
 
@@ -99,7 +99,7 @@ class EffectAssistance:
     def state(self) -> str:
         return json.dumps({"type": "assistance"})
 
-class EffectPollutionTransfer:
+class EffectPollutionTransfer(InterfaceEffect):
     def __init__(self) -> None:
         pass
 
