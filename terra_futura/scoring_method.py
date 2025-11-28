@@ -26,9 +26,9 @@ class ScoringMethod:
 
         self.calculatedTotal = Points(calculatedTotal)
 
-        assert self.pointsPerCombination > 0
+        assert self.pointsPerCombination.value > 0
         
-        combinations = {}
+        combinations: dict[Resource, int] = {}
         for resource in self.resources:
             combinations[resource] = combinations.get(resource, 0) + 1
         
@@ -36,7 +36,9 @@ class ScoringMethod:
         for resource in combinations.keys():
             m = min(m, resources[resource]//combinations[resource])
 
-        self.calculatedTotal = Points(self.calculatedTotal.value + m*self.pointsPerCombination)
+        self.calculatedTotal = Points(self.calculatedTotal.value + m*self.pointsPerCombination.value)
 
     def state(self) -> str:
+        if self.calculatedTotal == None:
+            return "Scoring method wasn't calculated"
         return str(self.calculatedTotal.value)
