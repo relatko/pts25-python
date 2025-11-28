@@ -24,6 +24,30 @@ class InterfacePile(Protocol):
 class InterfaceGrid(Protocol):
     def putCard(self, coordinate : GridPosition, card: InterfaceCard) -> None:
         ...
+    
+    def getCard(coordinate: GridPosition)-> Optional[InterfaceCard]:
+        ...
+
+    def canPutCard(coordinate: GridPosition)-> bool:
+        ...
+
+    def putCard(coordinate: GridPosition, card: InterfaceCard) -> bool:
+        ...
+
+    def canBeActivated(coordinate: GridPosition)-> bool:
+        ...
+        
+    def setActivated(coordinate: GridPosition) -> None:
+        ...
+
+    def setActivationPattern(pattern: List[GridPosition]) -> None:
+        ...
+    def endTurn() -> None:
+        ...
+
+    def state() -> None:
+        ...
+
 
 # MoveCard
 class InterfaceMoveCard(Protocol):
@@ -67,3 +91,4 @@ class TerraFuturaObserverInterface(Protocol):
 class GameObserverInterface(Protocol):
     def notifyAll(self, newState: dict[int, str]):
         ...
+
