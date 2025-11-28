@@ -99,6 +99,7 @@ class InterfaceGrid(Protocol):
 
     def setActivationPattern(self, pattern: List[GridPosition]) -> None:
         ...
+        
     def endTurn(self) -> None:
         ...
 
