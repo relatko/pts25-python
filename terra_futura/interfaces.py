@@ -30,3 +30,29 @@ class InterfaceMoveCard(Protocol):
         
 
     # treba implementovať zvyšok ...
+
+class TerraFuturaInterface(Protocol):
+    def takeCard(self, playerId: int, source: CardSource, destination: GridPosition) -> bool:
+        ...
+    
+    def discardLastCardFromDeck(self, playerId: int, deck: Deck) -> bool:
+        ...
+
+    def activateCard(self, playerId: int, card: GridPosition, 
+                     inputs: List[tuple[Resource, GridPosition]], 
+                     outputs: List[tuple[Resource, GridPosition]],
+                     pollution: List[GridPosition], 
+                     otherPlayerId: Optional[int], otherCard: Optional[GridPosition]):
+        ...
+    
+    def selectReward(self, playerId: int, resource: Resource):
+        ...
+
+    def turnFinished(self, playerId: int) -> bool:
+        ...
+    
+    def selectActivationPattern(self, playerId: int, card: int) -> bool:
+        ...
+    
+    def selectScoring(self, playerId: int, card: int) -> bool:
+        ...
