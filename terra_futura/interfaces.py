@@ -17,6 +17,9 @@ class InterfacePile(Protocol):
     def getCard(self, index:int) ->Optional[InterfaceCard]:
         ...
 
+    def removeLastCard(self):
+        ...
+
 # Grid
 class InterfaceGrid(Protocol):
     def putCard(self, coordinate : GridPosition, card: InterfaceCard) -> None:
@@ -55,4 +58,12 @@ class TerraFuturaInterface(Protocol):
         ...
     
     def selectScoring(self, playerId: int, card: int) -> bool:
+        ...
+
+class TerraFuturaObserverInterface(Protocol):
+    def notify(self, state: GameState):
+        ...
+
+class GameObserverInterface(Protocol):
+    def notifyAll(self, newState: dict[int, str]):
         ...
