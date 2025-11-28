@@ -15,7 +15,7 @@ class MoveCard(InterfaceMoveCard):
             return False
 
         # Get the card from grid
-        card = grid.getCard(cardIndex)
+        card = pile.getCard(cardIndex)
 
         # Check if there's a card
         if card is None:
