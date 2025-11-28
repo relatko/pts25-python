@@ -25,6 +25,8 @@ class MoveCard(InterfaceMoveCard):
         pile.takeCard(cardIndex)
 
 
-        grid.putCard(gridCoordinate, card)
+        result = grid.putCard(gridCoordinate, card)
+
+        assert result == True
 
         return True
