@@ -5,11 +5,6 @@ from terra_futura.simple_types import *
 from abc import ABC, abstractmethod
 from typing import List
 
-# Zostalo z pôvodného...
-class InterfaceActivateGrid(Protocol):
-    def set_activation_pattern(self, pattern: List[Tuple[int, int]]) -> None:
-        ...
-
 # Effect
 class Effect(ABC):
     @abstractmethod
