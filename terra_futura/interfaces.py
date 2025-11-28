@@ -30,25 +30,22 @@ class InterfacePile(Protocol):
 
 # Grid
 class InterfaceGrid(Protocol):
-    def putCard(self, coordinate : GridPosition, card: InterfaceCard) -> None:
-        ...
-    
-    def getCard(coordinate: GridPosition)-> Optional[InterfaceCard]:
+    def getCard(self, coordinate: GridPosition)-> Optional[InterfaceCard]:
         ...
 
-    def canPutCard(coordinate: GridPosition)-> bool:
+    def canPutCard(self, coordinate: GridPosition)-> bool:
         ...
 
-    def putCard(coordinate: GridPosition, card: InterfaceCard) -> bool:
+    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> bool:
         ...
 
-    def canBeActivated(coordinate: GridPosition)-> bool:
+    def canBeActivated(self, coordinate: GridPosition)-> bool:
         ...
         
-    def setActivated(coordinate: GridPosition) -> None:
+    def setActivated(self, coordinate: GridPosition) -> None:
         ...
 
-    def setActivationPattern(pattern: List[GridPosition]) -> None:
+    def setActivationPattern(self, pattern: List[GridPosition]) -> None:
         ...
     def endTurn(self) -> None:
         ...
@@ -77,10 +74,10 @@ class TerraFuturaInterface(Protocol):
                      inputs: List[tuple[Resource, GridPosition]], 
                      outputs: List[tuple[Resource, GridPosition]],
                      pollution: List[GridPosition], 
-                     otherPlayerId: Optional[int], otherCard: Optional[GridPosition]):
+                     otherPlayerId: Optional[int], otherCard: Optional[GridPosition]) -> None:
         ...
     
-    def selectReward(self, playerId: int, resource: Resource):
+    def selectReward(self, playerId: int, resource: Resource) -> None:
         ...
 
     def turnFinished(self, playerId: int) -> bool:
@@ -93,10 +90,10 @@ class TerraFuturaInterface(Protocol):
         ...
 
 class TerraFuturaObserverInterface(Protocol):
-    def notify(self, state: GameState):
+    def notify(self, state: GameState) -> None:
         ...
 
 class GameObserverInterface(Protocol):
-    def notifyAll(self, newState: dict[int, str]):
+    def notifyAll(self, newState: dict[int, str]) -> None:
         ...
 
