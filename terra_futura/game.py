@@ -1,11 +1,8 @@
 from typing import Optional
 from .player import Player
 from .simple_types import GameState, Deck, CardSource, GridPosition, Resource
-from .grid import Grid
 from .gameobserver import GameObserver
-from .pile import Pile
-from .interfaces import TerraFuturaInterface
-from .move_card import MoveCard
+from .interfaces import TerraFuturaInterface, InterfaceGrid, InterfacePile, InterfaceMoveCard
 from .process_action import ProcessAction
 from .process_action_assistance import ProcessActionAssistance
 from .select_reward import SelectReward
@@ -13,16 +10,16 @@ from .select_reward import SelectReward
 class Game(TerraFuturaInterface):
     _state: GameState
     _players: list[Player]
-    _piles: dict[Deck, Pile]
+    _piles: dict[Deck, InterfacePile]
     _turnNumber: int = 0
     _gameObserver: GameObserver
-    _moveCard: MoveCard
+    _moveCard: InterfaceMoveCard
     _processAction: ProcessAction
     _processActionAssistance: ProcessActionAssistance
     _selectReward: SelectReward
 
-    def __init__(self, players: list[Player], piles: dict[Deck, Pile], 
-                 moveCard: MoveCard, processAction: ProcessAction, 
+    def __init__(self, players: list[Player], piles: dict[Deck, InterfacePile], 
+                 moveCard: InterfaceMoveCard, processAction: ProcessAction, 
                  processActionAssistance: ProcessActionAssistance, 
                  selectReward: SelectReward, gameObserver: GameObserver) -> None:
         
@@ -158,7 +155,7 @@ class Game(TerraFuturaInterface):
             
             otherGrid = self._players[otherPlayerId]
 
-            assert isinstance(otherGrid, Grid) # same here
+            assert isinstance(otherGrid, InterfaceGrid) # same here
             assisting_card = otherGrid.getCard(otherCard)
 
             if assisting_card is None:
