@@ -1,6 +1,5 @@
 # pylint: disable=unused-argument, duplicate-code, redefined-builtin
 from typing import List, Tuple, TYPE_CHECKING, Optional
-from terra_futura.simple_types import GridPosition, CardSource
 from terra_futura.simple_types import Resource
 if TYPE_CHECKING:
     from terra_futura.card import Card
@@ -15,8 +14,8 @@ class InterfaceCard:
     # pylint: disable=redefined-builtin
 
     resources: List["Resource"]
-    upper_effect: "CardEffects"
-    lower_effect: "CardEffects"
+    upper_effect: Optional["InterfaceEffect"]
+    lower_effect: Optional["InterfaceEffect"]
     pollution_limit: int
 
     def can_get_resources(self, resources: List["Resource"]) -> bool:
@@ -67,7 +66,7 @@ class InterfaceEffect:
     ) -> bool:
         raise NotImplementedError
 
-    def hasAssistance(self) -> bool:
+    def has_assistance(self) -> bool:
         raise NotImplementedError
 
     def state(self) -> str:
