@@ -4,7 +4,6 @@ import json
 from terra_futura.activation_pattern import ActivationPattern
 from terra_futura.interfaces import InterfaceGrid, InterfaceCard 
 from terra_futura.simple_types import GridPosition 
-
 class GridFake(InterfaceGrid):
     activations_received: List[GridPosition] 
     
@@ -17,10 +16,10 @@ class GridFake(InterfaceGrid):
     def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> None:
         ... 
     
+# Has to return something
     def getCard(self, coordinate: GridPosition) -> Optional[InterfaceCard]:
         return None 
-
-# Need to return something for testing
+    
     def canPutCard(self, coordinate: GridPosition) -> bool:
         return True 
         
@@ -36,7 +35,6 @@ class GridFake(InterfaceGrid):
     def state(self) -> None:
         ...
 
-
 def create_grid_positions_from_tuples(tuples: List[Tuple[int, int]]) -> List[GridPosition]:
     """Converts the test tuple patterns into the required GridPosition objects."""
     return [GridPosition(x, y) for x, y in tuples]
@@ -46,10 +44,13 @@ def create_grid_positions_from_tuples(tuples: List[Tuple[int, int]]) -> List[Gri
 class TestActivationPattern(unittest.TestCase):
     def setUp(self) -> None:
         self.grid_fake: GridFake = GridFake()
-        self.raw_pattern_data: List[Tuple[int, int]] = [(0, 0), (-1, 1), (0, 0)]
+        
+        raw_tuples: List[Tuple[int, int]] = [(0, 0), (-1, 1), (0, 0)]
+        
+        initial_pattern: List[GridPosition] = create_grid_positions_from_tuples(raw_tuples)
         
         self.activation_pattern = ActivationPattern(
-            self.grid_fake, self.raw_pattern_data)
+            self.grid_fake, initial_pattern)
 
     def check_state(self, activations: List[Tuple[int, int]], is_selected: bool) -> None:
         state: Any = json.loads(self.activation_pattern.state())
