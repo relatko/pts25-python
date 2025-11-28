@@ -1,5 +1,5 @@
 from terra_futura.interfaces import InterfaceCard
 
-class Card:
-    def __init__(self):
+class Card(InterfaceCard):
+    def __init__(self) -> None:
         pass
