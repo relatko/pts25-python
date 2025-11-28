@@ -21,7 +21,7 @@ class Effect(ABC):
 
 # Card
 class InterfaceCard(ABC):
-    def __init__(self):
+    def __init__(self) ->None:
         # Attributes
         self.resources: List[Resource] = []
         self.pollutionSpacesL: int = 0
@@ -112,8 +112,6 @@ class InterfaceMoveCard(Protocol):
     def moveCard(self, pile: InterfacePile,cardIndex: int, gridCoordinate: GridPosition, grid: InterfaceGrid) ->bool:
         ...
         
-
-    # treba implementovať zvyšok ...
 
 class TerraFuturaInterface(Protocol):
     def takeCard(self, playerId: int, source: CardSource, cardIndex: int, destination: GridPosition) -> bool:
