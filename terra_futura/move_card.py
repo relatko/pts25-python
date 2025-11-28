@@ -5,7 +5,7 @@ from terra_futura.simple_types import GridPosition
 from terra_futura.interfaces import InterfaceMoveCard, InterfaceGrid, InterfacePile
 
 class MoveCard(InterfaceMoveCard):
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def moveCard(self, pile: InterfacePile,cardIndex: int, gridCoordinate: GridPosition, grid: InterfaceGrid) ->bool:
@@ -15,7 +15,7 @@ class MoveCard(InterfaceMoveCard):
             return False
 
         # Get the card from grid
-        card = grid.getCard(cardIndex)
+        card = pile.getCard(cardIndex)
 
         # Check if there's a card
         if card is None:
