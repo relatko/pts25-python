@@ -1,2 +1,4 @@
+from .simple_types import Resource
+
 class ScoringMethod:
-    pass
+    resources: list[Resource]
