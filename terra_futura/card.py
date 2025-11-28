@@ -46,22 +46,22 @@ class Card(InterfaceCard):
             raise ValueError("Too much pollution")
         self.resources.extend(resources)
 
-    def check(self, input, output, pollution):
+    def check(self, inputs, output, pollution) -> bool:
         return (
             self.upper_effect is not None and
-            self.upper_effect.check(input, output, pollution)
+            self.upper_effect.check(inputs, output, pollution)
         )
 
-    def check_lower(self, input, output, pollution):
+    def check_lower(self, inputs, output, pollution) -> bool:
         return (
             self.lower_effect is not None and
-            self.lower_effect.check(input, output, pollution)
+            self.lower_effect.check(inputs, output, pollution)
         )
 
-    def has_assistance(self):
+    def has_assistance(self) -> bool:
         return self.assistance
 
-    def state(self):
+    def state(self) -> str:
         return json.dumps({
             "resources": [r.value for r in self.resources],
             "pollution": sum(r == Resource.POLLUTION for r in self.resources),
