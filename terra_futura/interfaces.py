@@ -2,11 +2,6 @@
 from typing import List, Tuple, Optional, Protocol
 from terra_futura.simple_types import *
 
-# Zostalo z pôvodného...
-class InterfaceActivateGrid(Protocol):
-    def set_activation_pattern(self, pattern: List[Tuple[int, int]]) -> None:
-        ...
-
 # Card
 class InterfaceCard(Protocol):
     def canGetResources(self, resources: List[Resource]) -> bool:
