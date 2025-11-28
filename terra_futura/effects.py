@@ -2,8 +2,8 @@
 import json
 from collections import Counter
 from typing import List, Set
-from .simple_types import Resource
-from .interfaces import InterfaceEffect
+from terra_futura.simple_types import Resource
+from terra_futura.interfaces import InterfaceEffect
 
 RAW_RESOURCES: Set[Resource] = {
     Resource.GREEN,
