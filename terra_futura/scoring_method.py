@@ -1,0 +1,2 @@
+class ScoringMethod:
+    pass
