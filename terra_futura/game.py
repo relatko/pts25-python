@@ -185,7 +185,7 @@ class Game(TerraFuturaInterface):
         
         self._notifyObservers()
 
-    def selectReward(self, playerId: int, resource: Resource):
+    def selectReward(self, playerId: int, resource: Resource) -> None:
         if self._state != GameState.SelectReward:
             return
         

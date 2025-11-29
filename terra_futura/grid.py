@@ -10,7 +10,7 @@ class Grid (InterfaceGrid):
     def getCard(self, coordinate: GridPosition) -> Optional[Card]:
         ...
 
-    def endTurn(self):
+    def endTurn(self) -> None:
         ...
 
     def setActivationPattern(self, pattern: list[GridPosition]):
