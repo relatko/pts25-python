@@ -1,8 +1,7 @@
 from typing import Optional
 from .player import Player
 from .simple_types import GameState, Deck, CardSource, GridPosition, Resource
-from .interfaces import TerraFuturaInterface, GameObserverInterface, InterfacePile, InterfaceMoveCard, ProcessActionInterface
-from .process_action_assistance import ProcessActionAssistance
+from .interfaces import TerraFuturaInterface, GameObserverInterface, InterfacePile, InterfaceMoveCard, ProcessActionInterface, ProcessActionAssistanceInterface
 from .select_reward import SelectReward
 from .grid import Grid
 
@@ -14,12 +13,12 @@ class Game(TerraFuturaInterface):
     _gameObserver: GameObserverInterface
     _moveCard: InterfaceMoveCard
     _processAction: ProcessActionInterface
-    _processActionAssistance: ProcessActionAssistance
+    _processActionAssistance: ProcessActionAssistanceInterface
     _selectReward: SelectReward
 
     def __init__(self, players: list[Player], piles: dict[Deck, InterfacePile], 
                  moveCard: InterfaceMoveCard, processAction: ProcessActionInterface, 
-                 processActionAssistance: ProcessActionAssistance, 
+                 processActionAssistance: ProcessActionAssistanceInterface, 
                  selectReward: SelectReward, gameObserver: GameObserverInterface) -> None:
         
         
@@ -121,7 +120,11 @@ class Game(TerraFuturaInterface):
         if pile is None:
             return False
         
-        grid = self._players[playerId].grid
+        player = self._getPlayer(playerId)
+        if player is None:
+            return False
+        
+        grid = player.grid
 
         if not self._moveCard.moveCard(pile, cardIndex, destination, grid):
             return False
@@ -141,7 +144,11 @@ class Game(TerraFuturaInterface):
         if self._state != GameState.ActivateCard:
             return
         
-        grid = self._players[playerId].grid
+        player = self._getPlayer(playerId)
+        if player is None:
+            return
+        
+        grid = player.grid
         
         card_obj = grid.getCard(card)
         if card_obj is None:
@@ -152,9 +159,12 @@ class Game(TerraFuturaInterface):
             assert otherPlayerId != None # why do i need to assert?
             assert otherCard != None # why do i need to assert?
             
-            otherGrid = self._players[otherPlayerId]
+            otherPlayer = self._getPlayer(otherPlayerId)
+            if otherPlayer is None:
+                return
+            
+            otherGrid = otherPlayer.grid
 
-            assert isinstance(otherGrid, Grid)
             assisting_card = otherGrid.getCard(otherCard)
 
             if assisting_card is None:
@@ -208,7 +218,11 @@ class Game(TerraFuturaInterface):
         if self._state != GameState.ActivateCard:
             return False
         
-        grid = self._players[playerId].grid
+        player = self._getPlayer(playerId)
+        if player is None:
+            return False
+        grid = player.grid
+
         grid.endTurn()
         
         if self._turnNumber < 9:
@@ -241,7 +255,10 @@ class Game(TerraFuturaInterface):
         if card not in {0, 1}:
             return False
         
-        self._players[playerId].activation_patterns[card].select()
+        player = self._getPlayer(playerId)
+        if player is None:
+            return False
+        player.activation_patterns[card].select()
         self._state = GameState.ActivateCard
         
         self._notifyObservers()
@@ -257,7 +274,9 @@ class Game(TerraFuturaInterface):
         if card not in {0, 1}:
             return False
         
-        player = self._players[playerId]
+        player = self._getPlayer(playerId)
+        if player is None:
+            return False
 
         scoring_method = player.scoring_methods[card]
         scoring_method.selectThisMethodAndCalculate()
