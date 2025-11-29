@@ -16,17 +16,18 @@ class GridFake(InterfaceGrid):
     def getCard(self, coordinate: GridPosition)-> Optional[InterfaceCard]:
         if coordinate == GridPosition(0,0):
             card = CardFake(1, TransformationFixed([], [Resource.GREEN], 0))
-            card.getResources([Resource.RED, Resource.RED, Resource.MONEY, Resource.CONSTRUCTION])
+            card.putResources([Resource.RED, Resource.RED, Resource.MONEY, Resource.CONSTRUCTION])
             return card
 
         if coordinate == GridPosition(1,0):
-            card = CardFake(1, TransformationFixed([], [Resource.GREEN], 0))
-            card.getResources([Resource.FOOD, Resource.CONSTRUCTION, Resource.GOODS])
+            card = CardFake(1, TransformationFixed([], [Resource.GREEN], 1))
+            card.putResources([Resource.FOOD, Resource.CONSTRUCTION, Resource.GOODS])
+            card.place_pollution(1)
             return card
         
         if coordinate == GridPosition(2,0):
-            card = CardFake(0, TransformationFixed([], [Resource.GREEN], 0))
-            card.getResources([Resource.RED, Resource.RED, Resource.MONEY, Resource.CONSTRUCTION, Resource.RED])
+            card = CardFake(1, TransformationFixed([], [Resource.GREEN], 0))
+            card.putResources([Resource.RED, Resource.RED, Resource.MONEY, Resource.CONSTRUCTION, Resource.RED])
             return card
 
     def canPutCard(self, coordinate: GridPosition)-> bool:
@@ -158,7 +159,7 @@ class CardFake(InterfaceCard):
     # Resource management on this card
     # ------------------------------------------------------------------
 
-    def canGetResources(self, resources: List[Resource]) -> bool:
+    def canPutResources(self, resources: List[Resource]) -> bool:
         """
         Can this card receive these resources as production?
 
@@ -173,17 +174,17 @@ class CardFake(InterfaceCard):
             return False
         return True
 
-    def getResources(self, resources: List[Resource]) -> None:
+    def putResources(self, resources: List[Resource]) -> None:
         """
         Add resources onto this card (produced by its effect).
 
         Raises if card is inactive.
         """
-        if not self.canGetResources(resources):
+        if not self.canPutResources(resources):
             raise ValueError("Cannot add resources to an inactive card.")
         self.resources.extend(resources)
 
-    def canPutResources(self, resources: List[Resource]) -> bool:
+    def canGetResources(self, resources: List[Resource]) -> bool:
         """
         Can this card *pay* (give up) the given resources?
 
@@ -201,7 +202,7 @@ class CardFake(InterfaceCard):
         # Check wanted multiset is subset of have
         return all(have[r] >= c for r, c in wanted.items())
 
-    def putResources(self, resources: List[Resource]) -> None:
+    def getResources(self, resources: List[Resource]) -> None:
         """
         Remove the given resources from this card (i.e., pay them).
 
@@ -209,7 +210,7 @@ class CardFake(InterfaceCard):
         - card is inactive
         - card does not contain sufficient resources
         """
-        if not self.canPutResources(resources):
+        if not self.canGetResources(resources):
             raise ValueError("Cannot pay these resources from this card.")
 
         # Multiset removal
@@ -246,7 +247,7 @@ class CardFake(InterfaceCard):
             return False
 
         # Can this card pay the requested input (from its own resources)?
-        if not self.canPutResources(input):
+        if not self.canGetResources(input):
             return False
 
         # Can this card accept the resulting pollution?
@@ -266,7 +267,7 @@ class CardFake(InterfaceCard):
         if self.lowerEffect is None:
             return False
 
-        if not self.canPutResources(input):
+        if not self.canGetResources(input):
             return False
 
         if not self.can_place_pollution(pollution):
@@ -302,14 +303,24 @@ class TestScoringMethod(unittest.TestCase):
         self.grid = GridFake()
 
     def test_scoringMethodNotCalculatedYet(self) ->None:
-        scoring = self.scoringMethod([Resource.GREEN, Resource.GREEN, Resource.CONSTRUCTION], 5, self.grid)
+        scoring = self.scoringMethod([Resource.GREEN, Resource.GREEN, Resource.CONSTRUCTION], Points(5), self.grid)
         self.assertEqual("Scoring method wasn't calculated",  scoring.state())
     
     def test_scoringMethodEmptyNotCalculated(self) ->None:
-        scoring = self.scoringMethod([], 0, self.grid)
+        scoring = self.scoringMethod([], Points(0), self.grid)
         self.assertEqual("Scoring method wasn't calculated",  scoring.state())
 
-    def test_scoringMethodEmptyCalculated(self) ->None:
-        scoring = self.scoringMethod([], 0, self.grid)
+    def test_scoringMethodEmptyCalculated(self) -> None:
+        scoring = self.scoringMethod([], Points(0), self.grid)
         scoring.selectThisMethodAndCalculate()
-        self.assertEqual("14",  scoring.state())
+        self.assertEqual("14", scoring.state())
+
+    def test_scoringMethodNoBonusCalculated(self) -> None:
+        scoring = self.scoringMethod([Resource.GREEN, Resource.GREEN, Resource.CONSTRUCTION], Points(5), self.grid)
+        scoring.selectThisMethodAndCalculate()
+        self.assertEqual("14", scoring.state())
+
+    def test_scoringMethodBonusCalculated(self) -> None:
+        scoring = self.scoringMethod([Resource.RED, Resource.CONSTRUCTION], Points(3), self.grid)
+        scoring.selectThisMethodAndCalculate()
+        self.assertEqual("20", scoring.state())

@@ -23,7 +23,14 @@ class ScoringMethod:
 
     def selectThisMethodAndCalculate(self) -> None:
         resources = {resource: 0 for resource in Resource}
-        baseScores = [1, 1, 1, 5, 5, 6, 0, -1]
+        baseScores = {Resource.RED: 1,
+                      Resource.GREEN: 1,
+                      Resource.YELLOW: 1,
+                      Resource.CONSTRUCTION: 5,
+                      Resource.FOOD: 5,
+                      Resource.GOODS: 6,
+                      Resource.POLLUTION: 0,
+                      Resource.MONEY: 0}
         calculatedTotal = 0
 
         for row in range(-2, 3):
@@ -38,11 +45,11 @@ class ScoringMethod:
 
 
         for resource in Resource:
-            calculatedTotal += baseScores[resource.value-1]*resources[resource]
+            calculatedTotal += baseScores[resource]*resources[resource]
 
         self.calculatedTotal = Points(calculatedTotal)
 
-        assert self.pointsPerCombination.value > 0
+        assert self.pointsPerCombination.value >= 0
         
         combinations: dict[Resource, int] = {}
         for resource in self.resources:
