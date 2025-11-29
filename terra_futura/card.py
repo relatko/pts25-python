@@ -206,10 +206,6 @@ class Card(InterfaceCard):
         if not self.canGetResources(input):
             return False
 
-        # Can this card accept the resulting pollution?
-        if not self.can_place_pollution(pollution):
-            return False
-
         # Delegate detailed IO check to the effect itself
         return self.upperEffect.check(input, output, pollution)
 
@@ -224,9 +220,6 @@ class Card(InterfaceCard):
             return False
 
         if not self.canGetResources(input):
-            return False
-
-        if not self.can_place_pollution(pollution):
             return False
 
         return self.lowerEffect.check(input, output, pollution)
