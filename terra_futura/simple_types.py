@@ -68,13 +68,13 @@ class CardSource:
         self._index = value
 
 class GameState(Enum):
-    TakeCardNoCardDiscarded = 1
-    TakeCardCardDiscarded = 2
-    ActivateCard = 3
-    SelectReward = 4
-    SelectActivationPattern = 5
-    SelectScoringMethod = 6
-    Finish = 7
+    TAKE_CARD_NO_CARD_DISCARDED = 1
+    TAKE_CARD_CARD_DISCARDED = 2
+    ACTIVATE_CARD = 3
+    SELECT_REWARD = 4
+    SELECT_ACTIVATION_PATTERN = 5
+    SELECT_SCORING_METHOD = 6
+    FINISH = 7
 
 @dataclass
 class Points:
