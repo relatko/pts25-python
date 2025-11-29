@@ -115,7 +115,7 @@ class Card(InterfaceCard):
     # Resource management on this card
     # ------------------------------------------------------------------
 
-    def canGetResources(self, resources: List[Resource]) -> bool:
+    def canPutResources(self, resources: List[Resource]) -> bool:
         """
         Can this card receive these resources as production?
 
@@ -130,17 +130,17 @@ class Card(InterfaceCard):
             return False
         return True
 
-    def getResources(self, resources: List[Resource]) -> None:
+    def putResources(self, resources: List[Resource]) -> None:
         """
         Add resources onto this card (produced by its effect).
 
         Raises if card is inactive.
         """
-        if not self.canGetResources(resources):
+        if not self.canPutResources(resources):
             raise ValueError("Cannot add resources to an inactive card.")
         self.resources.extend(resources)
 
-    def canPutResources(self, resources: List[Resource]) -> bool:
+    def canGetResources(self, resources: List[Resource]) -> bool:
         """
         Can this card *pay* (give up) the given resources?
 
@@ -158,7 +158,7 @@ class Card(InterfaceCard):
         # Check wanted multiset is subset of have
         return all(have[r] >= c for r, c in wanted.items())
 
-    def putResources(self, resources: List[Resource]) -> None:
+    def getResources(self, resources: List[Resource]) -> None:
         """
         Remove the given resources from this card (i.e., pay them).
 
@@ -166,7 +166,7 @@ class Card(InterfaceCard):
         - card is inactive
         - card does not contain sufficient resources
         """
-        if not self.canPutResources(resources):
+        if not self.canGetResources(resources):
             raise ValueError("Cannot pay these resources from this card.")
 
         # Multiset removal
@@ -203,7 +203,7 @@ class Card(InterfaceCard):
             return False
 
         # Can this card pay the requested input (from its own resources)?
-        if not self.canPutResources(input):
+        if not self.canGetResources(input):
             return False
 
         # Can this card accept the resulting pollution?
@@ -223,7 +223,7 @@ class Card(InterfaceCard):
         if self.lowerEffect is None:
             return False
 
-        if not self.canPutResources(input):
+        if not self.canGetResources(input):
             return False
 
         if not self.can_place_pollution(pollution):

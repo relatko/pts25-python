@@ -114,8 +114,8 @@ def test_get_resources_on_active_card():
     r1 = DummyResource("wood")
     r2 = DummyResource("brick")
 
-    assert c.canGetResources([r1, r2]) is True
-    c.getResources([r1, r2])
+    assert c.canPutResources([r1, r2]) is True
+    c.putResources([r1, r2])
     assert Counter(c.resources) == Counter([r1, r2])
 
 
@@ -124,9 +124,9 @@ def test_get_resources_on_inactive_card_fails():
     c.place_pollution(1)  # now inactive
 
     r = DummyResource("wood")
-    assert c.canGetResources([r]) is False
+    assert c.canPutResources([r]) is False
     with pytest.raises(ValueError):
-        c.getResources([r])
+        c.putResources([r])
 
 
 def test_can_put_resources_checks_multiset_and_activity():
@@ -134,18 +134,18 @@ def test_can_put_resources_checks_multiset_and_activity():
     r1 = DummyResource("wood")
     r2 = DummyResource("brick")
 
-    c.getResources([r1, r1, r2])  # [wood, wood, brick]
+    c.putResources([r1, r1, r2])  # [wood, wood, brick]
 
     # Enough resources – should be OK
-    assert c.canPutResources([r1, r2]) is True
+    assert c.canGetResources([r1, r2]) is True
 
     # Not enough wood for 3 wood
-    assert c.canPutResources([r1, r1, r1]) is False
+    assert c.canGetResources([r1, r1, r1]) is False
 
     # Make card inactive -> cannot pay anything
     c.place_pollution(1)
     assert c.is_active is False
-    assert c.canPutResources([r1]) is False
+    assert c.canGetResources([r1]) is False
 
 
 def test_put_resources_removes_exact_multiset():
@@ -154,15 +154,15 @@ def test_put_resources_removes_exact_multiset():
     b = DummyResource("brick")
     s = DummyResource("stone")
 
-    c.getResources([w, w, b, s])  # wood, wood, brick, stone
+    c.putResources([w, w, b, s])  # wood, wood, brick, stone
 
-    c.putResources([w, b])  # remove one wood and one brick
+    c.getResources([w, b])  # remove one wood and one brick
 
     assert Counter(c.resources) == Counter([w, s])
 
     # cannot remove non-existing second brick
     with pytest.raises(ValueError):
-        c.putResources([b])
+        c.getResources([b])
 
 
 # ---------------------------------------------------------------------------
@@ -177,7 +177,7 @@ def test_check_uses_upper_effect_when_card_is_active_and_preconditions_ok():
     c = Card(pollutionSpacesL=1, upperEffect=eff)
 
     # Prepare card so it can pay input
-    c.getResources([w])
+    c.putResources([w])
 
     result = c.check(input=[w], output=[reward], pollution=1)
 
@@ -191,7 +191,7 @@ def test_check_returns_false_if_no_upper_effect():
     w = DummyResource("wood")
     reward = DummyResource("product")
 
-    c.getResources([w])
+    c.putResources([w])
     assert c.check(input=[w], output=[reward], pollution=0) is False
 
 
@@ -201,7 +201,7 @@ def test_check_does_not_call_effect_if_card_inactive():
 
     eff = AlwaysTrueEffect()
     c = Card(pollutionSpacesL=0, upperEffect=eff)
-    c.getResources([w])
+    c.putResources([w])
 
     # make card inactive
     c.place_pollution(1)
@@ -220,7 +220,7 @@ def test_check_fails_if_card_cannot_pay_input():
     c = Card(pollutionSpacesL=1, upperEffect=eff)
 
     # Card has no resources, so cannot pay wood
-    assert c.canPutResources([w]) is False
+    assert c.canGetResources([w]) is False
     result = c.check(input=[w], output=[reward], pollution=0)
     assert result is False
     assert eff.calls == 0
@@ -234,7 +234,7 @@ def test_check_lower_uses_lower_effect_similarly():
     eff_lower = AlwaysTrueEffect(label="lower")
     c = Card(pollutionSpacesL=1, upperEffect=eff_upper, lowerEffect=eff_lower)
 
-    c.getResources([w])
+    c.putResources([w])
     result_upper = c.check(input=[w], output=[reward], pollution=0)
     result_lower = c.checkLower(input=[w], output=[reward], pollution=0)
 
@@ -271,7 +271,7 @@ def test_state_contains_basic_info():
     c = Card(pollutionSpacesL=2)
     w = DummyResource("wood")
 
-    c.getResources([w])
+    c.putResources([w])
     c.place_pollution(1)
 
     s = c.state()
