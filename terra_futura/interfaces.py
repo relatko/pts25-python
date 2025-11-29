@@ -3,7 +3,7 @@ from typing import List, Tuple, Optional, Protocol
 from terra_futura.simple_types import *
 
 from abc import ABC, abstractmethod
-from typing import List, Dict
+from typing import List
 
 # Zostalo z pôvodného...
 class InterfaceActivateGrid(Protocol):
@@ -157,10 +157,6 @@ class TerraFuturaInterface(Protocol):
     def selectScoring(self, playerId: int, card: int) -> bool:
         ...
 
-class TerraFuturaObserverInterface(Protocol):
-    def notify(self, state: GameState) -> None:
-        ...
-
 class GameObserverInterface(Protocol):
     def notifyAll(self, newState: dict[int, str]) -> None:
         ...
@@ -171,4 +167,9 @@ class ProcessActionInterface(Protocol):
                      outputs: List[tuple[Resource, GridPosition]], 
                      pollution: List[GridPosition]) -> bool:
         ...
-    
+class ProcessActionAssistanceInterface(Protocol):
+    def activateCard(self, card: InterfaceCard, grid: InterfaceGrid, assistingPlayer: int, 
+                     assistingCard: InterfaceCard, inputs: List[tuple[Resource, GridPosition]], 
+                     outputs: List[tuple[Resource, GridPosition]], 
+                     pollution: List[GridPosition]) -> bool:
+        ...

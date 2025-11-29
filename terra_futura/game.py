@@ -1,8 +1,7 @@
 from typing import Optional
 from .player import Player
 from .simple_types import GameState, Deck, CardSource, GridPosition, Resource
-from .interfaces import *
-from .process_action import ProcessActionInterface
+from .interfaces import TerraFuturaInterface, GameObserverInterface, InterfacePile, InterfaceMoveCard, ProcessActionInterface
 from .process_action_assistance import ProcessActionAssistance
 from .select_reward import SelectReward
 from .grid import Grid
