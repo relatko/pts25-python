@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
-from interfaces import Effect, Resource
+from terra_futura.interfaces import Effect, Resource
 
 # Assuming you already have:
 # class Resource: ...

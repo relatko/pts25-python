@@ -1,4 +1,4 @@
-from interfaces import Resource, Effect
+from terra_futura.interfaces import Resource, Effect
 from typing import List
 from dataclasses import dataclass
 
@@ -24,7 +24,7 @@ class ArbitraryBasic(Effect):
     to: List[Resource]
     pollution: int
 
-    def __post_init__(self):
+    def __post_init__(self) ->None:
         # expose real UML attribute name: obj.from
         object.__setattr__(self, "from", self.from_)
 

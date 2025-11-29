@@ -120,7 +120,7 @@ class InterfaceGrid(Protocol):
     def endTurn(self) -> None:
         ...
 
-    def state(self) -> None:
+    def state(self) -> str:
         ...
 
 
@@ -157,13 +157,21 @@ class TerraFuturaInterface(Protocol):
     def selectScoring(self, playerId: int, card: int) -> bool:
         ...
 
-class TerraFuturaObserverInterface(Protocol):
-    def notify(self, state: GameState) -> None:
-        ...
-
 class GameObserverInterface(Protocol):
     def notifyAll(self, newState: dict[int, str]) -> None:
         ...
 
 
 
+class InterfaceSelectReward(Protocol):
+    def setReward(self, player: int, card: InterfaceCard, reward: List[Resource]) ->None:
+        ...
+    
+    def canSelectReward(self, resource: Resource) -> bool:
+        ...
+
+    def selectReward(self, resource: Resource) -> None:
+        ...
+
+    def state(self)-> str:
+        ...
