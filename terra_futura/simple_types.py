@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Union
 
+
 class GridPosition:
     _x: int
     _y: int
@@ -31,7 +32,7 @@ class Resource(Enum):
     GEAR = 5
     CAR =6
     MONEY = 7
-    POLUTION = 8
+    POLLUTION = 8
 
     def __str__(self) -> str:
         return self.name
@@ -67,14 +68,13 @@ class CardSource:
         self._index = value
 
 class GameState(Enum):
-    TAKE_CARD_NO_CARD_DISCARDED = 1
-    TAKE_CARD_CARD_DISCARDED = 2
-    ACTIVATE_CARD = 3
-    SELECT_REWARD = 4
-    SELECT_ACTIVATION_PATTERN = 5
-    SELECT_SCORING_METHOD = 6
-    FINISH = 7
-
+    TakeCardNoCardDiscarded = "TakeCardNoCardDiscarded"
+    TakeCardCardDiscarded = "TakeCardCardDiscarded"
+    ActivateCard = "ActivateCard"
+    SelectReward = "SelectReward"
+    SelectActivationPattern = "SelectActivationPattern"
+    SelectScoringMethod = "SelectScoringMethod"
+    Finish = "Finish"
 
 @dataclass
 class Points:

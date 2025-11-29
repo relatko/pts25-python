@@ -1,6 +1,6 @@
 import unittest
 
-from terra_futura.scoring_points import ScoringMethod
+from terra_futura.scoring_method import ScoringMethod
 from terra_futura.simple_types import Resource, Points
 
 
@@ -16,7 +16,7 @@ class TestScoringMethod(unittest.TestCase):
             Resource.GREEN,
             Resource.RED,
             Resource.MONEY,       # ignored
-            Resource.POLUTION    # ignored
+            Resource.POLLUTION    # ignored
         ]
 
         result = method.select_this_method_and_calculate(available)
