@@ -50,19 +50,19 @@ class InterfaceCard(ABC):
     # --- Interface methods ---
 
     @abstractmethod
-    def canGetResources(self, resources: List[Resource]) -> bool:
-        pass
-
-    @abstractmethod
-    def getResources(self, resources: List[Resource]) -> None:
-        pass
-
-    @abstractmethod
     def canPutResources(self, resources: List[Resource]) -> bool:
         pass
 
     @abstractmethod
     def putResources(self, resources: List[Resource]) -> None:
+        pass
+
+    @abstractmethod
+    def canGetResources(self, resources: List[Resource]) -> bool:
+        pass
+
+    @abstractmethod
+    def getResources(self, resources: List[Resource]) -> None:
         pass
 
     @abstractmethod
