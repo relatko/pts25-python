@@ -197,7 +197,7 @@ def test_check_does_not_call_effect_if_card_inactive():
     reward = DummyResource("product")
 
     eff = AlwaysTrueEffect()
-    c = Card(pollutionSpacesL=0, upperEffect=eff)
+    c = Card(pollutionSpacesL=1, upperEffect=eff)
     c.putResources([w])
 
     # make card inactive
@@ -281,3 +281,31 @@ def test_state_contains_basic_info():
     c.place_pollution(2)
     s2 = c.state()
     assert "inactive" in s2
+
+def test_has_this_effect():
+    upper = AlwaysTrueEffect(assistance=True)
+    c1 = Card(pollutionSpacesL=1, upperEffect=upper)
+
+    assert "true" in c1.state()
+    assert "false" not in c1.state()
+    assert "No effect" in c1.state()
+
+    lower = AlwaysFalseEffect(assistance=False)
+    c2 = Card(pollutionSpacesL=1, lowerEffect=lower)
+
+    assert "true" not in c2.state()
+    assert "false" in c2.state()
+    assert "No effect" in c2.state()
+
+    upper = AlwaysTrueEffect(assistance=True)
+    lower = AlwaysFalseEffect(assistance=False)
+    c3 = Card(pollutionSpacesL=1, upperEffect=upper, lowerEffect=lower)
+
+    assert "true" in c3.state()
+    assert "false" in c3.state()
+
+    c4 = Card(pollutionSpacesL=1)
+
+    assert "true" not in c4.state()
+    assert "false" not in c4.state()
+    assert "No effect" in c4.state()

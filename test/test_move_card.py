@@ -19,6 +19,9 @@ class CardFake(InterfaceCard):
         self.lowerEffect: Optional[Effect] = None
 
     # --- Interface methods ---
+#not used
+    def isActive(self) -> bool:
+        return True
 
     def canPutResources(self, resources: List[Resource]) -> bool:
         return True

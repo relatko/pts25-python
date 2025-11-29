@@ -234,7 +234,12 @@ class Card(InterfaceCard):
         Human-readable summary, useful for debugging or logs.
         """
         status = "active" if self.is_active else "inactive"
+        
+        statusEffectUpper = self.upperEffect.state() if self.upperEffect else "No effect"
+        statusEffectLower = self.lowerEffect.state() if self.lowerEffect else "No effect"
         return (
             f"Card(status={status}, "
+            f"upper effect = {statusEffectUpper}, "
+            f"lower effect = {statusEffectLower}, "
             f"resources={len(self.resources)}, "
             f"pollution={self._pollution}/{self.pollutionSpacesL}")
