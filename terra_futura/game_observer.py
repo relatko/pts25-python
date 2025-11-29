@@ -1,6 +1,6 @@
 from typing import Dict
 from abc import ABC
-from .interfaces import TerraFuturaObserverInterface
+from terra_futura.interfaces import TerraFuturaObserverInterface
 
 class GameObserver(TerraFuturaObserverInterface):
     """
@@ -21,7 +21,7 @@ class GameObserver(TerraFuturaObserverInterface):
     dispatcher.notify("Player 1 placed a card.")
     """
 
-    def __init__(self):
+    def __init__(self) ->None:
         # Mapping: player_id -> observer instance
         self.observers: Dict[int, TerraFuturaObserverInterface] = {}
 
