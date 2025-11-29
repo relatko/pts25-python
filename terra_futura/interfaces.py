@@ -165,5 +165,10 @@ class GameObserverInterface(Protocol):
     def notifyAll(self, newState: dict[int, str]) -> None:
         ...
 
-
-
+class ProcessActionInterface(Protocol):
+    def activateCard(self, card: InterfaceCard, grid: InterfaceGrid, 
+                     inputs: list[tuple[Resource, GridPosition]], 
+                     outputs: List[tuple[Resource, GridPosition]], 
+                     pollution: List[GridPosition]) -> bool:
+        ...
+    
