@@ -1,15 +1,17 @@
 from .card import Card
+from .interfaces import InterfaceCard, InterfaceSelectReward
+from typing import List
 from .simple_types import Resource
 
-class SelectReward():
-    def setReward(self, player: int, card: Card, reward: list[Resource]):
+class SelectReward(InterfaceSelectReward):
+    def setReward(self, player: int, card: InterfaceCard, reward: List[Resource]) ->None:
         ...
     
     def canSelectReward(self, resource: Resource) -> bool:
-        ...
-    
-    def selectReward(self, resource: Resource):
+        return False
+
+    def selectReward(self, resource: Resource) -> None:
         ...
 
-    def state(self) -> str:
-        ...
+    def state(self)-> str:
+        return ""
