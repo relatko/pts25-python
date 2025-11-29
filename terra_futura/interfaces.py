@@ -120,7 +120,7 @@ class InterfaceGrid(Protocol):
     def endTurn(self) -> None:
         ...
 
-    def state(self) -> None:
+    def state(self) -> str:
         ...
 
 
