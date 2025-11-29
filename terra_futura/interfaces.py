@@ -48,6 +48,9 @@ class InterfaceCard(ABC):
         self.lowerEffect: Optional[Effect] = None
 
     # --- Interface methods ---
+    @abstractmethod
+    def isActive(self) -> bool:
+        pass
 
     @abstractmethod
     def canPutResources(self, resources: List[Resource]) -> bool:

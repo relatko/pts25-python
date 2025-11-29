@@ -1,10 +1,60 @@
-from __future__ import annotations
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from typing import List, Optional
+import unittest
+from terra_futura.scoring_method import ScoringMethod
+from terra_futura.simple_types import Resource, Points, GridPosition
+from terra_futura.interfaces import InterfaceGrid, InterfaceCard, Effect
+from typing import Optional, List
 from collections import Counter
-from .interfaces import Effect, Resource, InterfaceCard
+from terra_futura.transformation_fixed import TransformationFixed
 
-class Card(InterfaceCard):
+
+class GridFake(InterfaceGrid):
+#used
+    def getCard(self, coordinate: GridPosition)-> Optional[InterfaceCard]:
+        if coordinate == GridPosition(0,0):
+            card = CardFake(1, TransformationFixed([], [Resource.GREEN], 0))
+            card.putResources([Resource.RED, Resource.RED, Resource.MONEY, Resource.CONSTRUCTION])
+            return card
+
+        if coordinate == GridPosition(1,0):
+            card = CardFake(1, TransformationFixed([], [Resource.GREEN], 1))
+            card.putResources([Resource.FOOD, Resource.CONSTRUCTION, Resource.GOODS])
+            card.place_pollution(1)
+            return card
+        
+        if coordinate == GridPosition(2,0):
+            card = CardFake(1, TransformationFixed([], [Resource.GREEN], 0))
+            card.putResources([Resource.RED, Resource.RED, Resource.MONEY, Resource.CONSTRUCTION, Resource.RED])
+            return card
+
+    def canPutCard(self, coordinate: GridPosition)-> bool:
+        if(coordinate.x >2):
+            return False
+        return True
+
+    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> bool:
+        return True
+
+# not used
+    def canBeActivated(self, coordinate: GridPosition)-> bool:
+        return False
+        
+    def setActivated(self, coordinate: GridPosition) -> None:
+        ...
+
+    def setActivationPattern(self, pattern: List[GridPosition]) -> None:
+        ...
+        
+    def endTurn(self) -> None:
+        ...
+
+    def state(self) -> None:
+        ...
+
+class CardFake(InterfaceCard):
     """
     Terra Futura Card implementation.
 
@@ -166,7 +216,7 @@ class Card(InterfaceCard):
         # Multiset removal
         wanted = Counter(resources)
         new_contents: List[Resource] = []
-        current: Counter[Resource] = Counter()
+        current = Counter()
 
         for r in self.resources:
             # Keep this resource if we have already removed enough of that type
@@ -200,6 +250,10 @@ class Card(InterfaceCard):
         if not self.canGetResources(input):
             return False
 
+        # Can this card accept the resulting pollution?
+        if not self.can_place_pollution(pollution):
+            return False
+
         # Delegate detailed IO check to the effect itself
         return self.upperEffect.check(input, output, pollution)
 
@@ -214,6 +268,9 @@ class Card(InterfaceCard):
             return False
 
         if not self.canGetResources(input):
+            return False
+
+        if not self.can_place_pollution(pollution):
             return False
 
         return self.lowerEffect.check(input, output, pollution)
@@ -238,3 +295,32 @@ class Card(InterfaceCard):
             f"Card(status={status}, "
             f"resources={len(self.resources)}, "
             f"pollution={self._pollution}/{self.pollutionSpacesL}")
+
+
+class TestScoringMethod(unittest.TestCase):
+    def setUp(self) -> None:
+        self.scoringMethod = ScoringMethod
+        self.grid = GridFake()
+
+    def test_scoringMethodNotCalculatedYet(self) ->None:
+        scoring = self.scoringMethod([Resource.GREEN, Resource.GREEN, Resource.CONSTRUCTION], Points(5), self.grid)
+        self.assertEqual("Scoring method wasn't calculated",  scoring.state())
+    
+    def test_scoringMethodEmptyNotCalculated(self) ->None:
+        scoring = self.scoringMethod([], Points(0), self.grid)
+        self.assertEqual("Scoring method wasn't calculated",  scoring.state())
+
+    def test_scoringMethodEmptyCalculated(self) -> None:
+        scoring = self.scoringMethod([], Points(0), self.grid)
+        scoring.selectThisMethodAndCalculate()
+        self.assertEqual("14", scoring.state())
+
+    def test_scoringMethodNoBonusCalculated(self) -> None:
+        scoring = self.scoringMethod([Resource.GREEN, Resource.GREEN, Resource.CONSTRUCTION], Points(5), self.grid)
+        scoring.selectThisMethodAndCalculate()
+        self.assertEqual("14", scoring.state())
+
+    def test_scoringMethodBonusCalculated(self) -> None:
+        scoring = self.scoringMethod([Resource.RED, Resource.CONSTRUCTION], Points(3), self.grid)
+        scoring.selectThisMethodAndCalculate()
+        self.assertEqual("20", scoring.state())
