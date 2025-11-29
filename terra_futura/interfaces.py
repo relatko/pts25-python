@@ -1,4 +1,5 @@
 # pylint: disable=unused-argument, duplicate-code, redefined-builtin
+from typing import Protocol
 from typing import List, Tuple, TYPE_CHECKING, Optional
 from terra_futura.simple_types import Resource
 if TYPE_CHECKING:
@@ -57,7 +58,7 @@ class ObserverInterface:
     def notify(self, game_state: str) -> None:
         assert False
 
-class InterfaceEffect:
+class InterfaceEffect(Protocol):
     def check(
         self,
         inputs: List["Resource"],
