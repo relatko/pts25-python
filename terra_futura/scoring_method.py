@@ -5,22 +5,38 @@ import random
 # Add the parent directory to Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from terra_futura.simple_types import Resource, Points
+from terra_futura.simple_types import Resource, Points, GridPosition
 from typing import Optional
+from terra_futura.interfaces import InterfaceGrid
 
 class ScoringMethod:
     resources: list[Resource]
     pointsPerCombination: Points
     calculatedTotal: Optional[Points]
+    grid: InterfaceGrid
 
-    def __init__(self, resources: list[Resource], pointsPerCombination: Points):
+    def __init__(self, resources: list[Resource], pointsPerCombination: Points, grid: InterfaceGrid):
         self.resources = resources.copy()
         self.pointsPerCombination = pointsPerCombination
+        self.calculatedTotal = None
+        self.grid = grid
 
-    def selectThisMethodAndCalculate(self, resources: dict[Resource, int]) -> None:
-        assert len(resources.keys()) == 8
+    def selectThisMethodAndCalculate(self) -> None:
+        resources = {resource: 0 for resource in Resource}
         baseScores = [1, 1, 1, 5, 5, 6, 0, -1]
         calculatedTotal = 0
+
+        for row in range(-2, 3):
+            for col in range(-2, 3):
+                card = self.grid.getCard(GridPosition(row, col))
+                if card is not None:
+                    if card.isActive():
+                        for resource in card.resources:
+                            resources[resource] += 1 
+                    else:
+                        calculatedTotal -= 1          
+
+
         for resource in Resource:
             calculatedTotal += baseScores[resource.value-1]*resources[resource]
 

@@ -10,7 +10,6 @@ class Player:
     activation_patterns: list[ActivationPattern]
     scoring_methods: list[ScoringMethod]
     grid: Grid
-    resources: dict[Resource, int]
     
     def __post_init__(self) -> None:
         if len(self.activation_patterns) != 2:
