@@ -1,4 +1,4 @@
-from interfaces import Resource, Effect
+from terra_futura.interfaces import Resource, Effect
 from typing import List
 from dataclasses import dataclass
 

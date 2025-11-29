@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from typing import List
 from collections import Counter
 from abc import ABC, abstractmethod
-from interfaces import Effect, Resource
+from terra_futura.interfaces import Effect, Resource
 
 
 @dataclass(frozen=True)
