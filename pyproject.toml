@@ -1,0 +1,4 @@
+[tool.pytest.ini_options]
+pythonpath = ["terra_futura"]
+testpaths = ["test"]
+addopts = "-v"
