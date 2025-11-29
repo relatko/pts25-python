@@ -3,7 +3,24 @@ from typing import List, Tuple, Optional, Protocol
 from terra_futura.simple_types import *
 
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Dict
+
+# Zostalo z pôvodného...
+class InterfaceActivateGrid(Protocol):
+    def set_activation_pattern(self, pattern: List[Tuple[int, int]]) -> None:
+        ...
+
+# Game Observer Interface
+class TerraFuturaObserverInterface(ABC):
+    """
+    Observer interface for Terra Futura.
+    - notify(game_state: str): called whenever the game state changes
+    """
+
+    @abstractmethod
+    def notify(self, game_state: str) -> None:
+        """Receive game state change."""
+        pass
 
 # Effect
 class Effect(ABC):
