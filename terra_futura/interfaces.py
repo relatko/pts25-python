@@ -50,19 +50,19 @@ class InterfaceCard(ABC):
     # --- Interface methods ---
 
     @abstractmethod
-    def canGetResources(self, resources: List[Resource]) -> bool:
-        pass
-
-    @abstractmethod
-    def getResources(self, resources: List[Resource]) -> None:
-        pass
-
-    @abstractmethod
     def canPutResources(self, resources: List[Resource]) -> bool:
         pass
 
     @abstractmethod
     def putResources(self, resources: List[Resource]) -> None:
+        pass
+
+    @abstractmethod
+    def canGetResources(self, resources: List[Resource]) -> bool:
+        pass
+
+    @abstractmethod
+    def getResources(self, resources: List[Resource]) -> None:
         pass
 
     @abstractmethod
@@ -172,4 +172,18 @@ class ProcessActionAssistanceInterface(Protocol):
                      assistingCard: InterfaceCard, inputs: List[tuple[Resource, GridPosition]], 
                      outputs: List[tuple[Resource, GridPosition]], 
                      pollution: List[GridPosition]) -> bool:
+        ...
+
+
+class InterfaceSelectReward(Protocol):
+    def setReward(self, player: int, card: InterfaceCard, reward: List[Resource]) ->None:
+        ...
+    
+    def canSelectReward(self, resource: Resource) -> bool:
+        ...
+
+    def selectReward(self, resource: Resource) -> None:
+        ...
+
+    def state(self)-> str:
         ...

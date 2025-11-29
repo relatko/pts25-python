@@ -13,10 +13,10 @@ class SelectReward():
         ...
     
     def canSelectReward(self, resource: Resource) -> bool:
-        ...
-    
-    def selectReward(self, resource: Resource):
+        return False
+
+    def selectReward(self, resource: Resource) -> None:
         ...
 
-    def state(self) -> str:
-        ...
+    def state(self)-> str:
+        return ""
