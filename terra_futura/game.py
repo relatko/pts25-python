@@ -214,13 +214,15 @@ class Game(TerraFuturaInterface):
         if self._turnNumber <= 9:
             self._advanceTurn()
             self._state = GameState.TakeCardNoCardDiscarded
+            if self._turnNumber == 9 and self._onTurn == 0:
+                self._state = GameState.SelectActivationPattern
         else:
             # End game turns
             self._advanceTurn()
             if self._onTurn == 0:
-                self._state = GameState.SelectActivationPattern
+                self._state = GameState.SelectScoringMethod
             else:
-                self._state = GameState.TakeCardNoCardDiscarded
+                self._state = GameState.SelectActivationPattern
         
         self._notifyObservers()
         return True
@@ -238,5 +240,27 @@ class Game(TerraFuturaInterface):
         self._players[playerId].activation_patterns[card].select()
         self._state = GameState.ActivateCard
         
+        self._notifyObservers()
+        return True
+
+    def selectScoring(self, playerId: int, card: int) -> bool:
+        if not self.isPlayerOnTurn(playerId):
+            return False
+        
+        if self._state != GameState.SelectScoringMethod:
+            return False
+        
+        if card not in {0, 1}:
+            return False
+        
+        player = self._players[playerId]
+
+        scoring_method = player.scoring_methods[card]
+        scoring_method.selectThisMethodAndCalculate()
+
+        self._advanceTurn()
+        if self._onTurn == 0:
+            self._state = GameState.Finish
+
         self._notifyObservers()
         return True
