@@ -2,10 +2,11 @@ from typing import Optional
 from .player import Player
 from .simple_types import GameState, Deck, CardSource, GridPosition, Resource
 from .gameobserver import GameObserver
-from .interfaces import TerraFuturaInterface, InterfaceGrid, InterfacePile, InterfaceMoveCard
+from .interfaces import TerraFuturaInterface, InterfacePile, InterfaceMoveCard
 from .process_action import ProcessAction
 from .process_action_assistance import ProcessActionAssistance
 from .select_reward import SelectReward
+from .grid import Grid
 
 class Game(TerraFuturaInterface):
     _state: GameState
@@ -155,7 +156,7 @@ class Game(TerraFuturaInterface):
             
             otherGrid = self._players[otherPlayerId]
 
-            assert isinstance(otherGrid, InterfaceGrid) # same here
+            assert isinstance(otherGrid, Grid)
             assisting_card = otherGrid.getCard(otherCard)
 
             if assisting_card is None:
