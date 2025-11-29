@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from .activation_pattern import ActivationPattern
 from .scoring_method import ScoringMethod
 from .grid import Grid
-from .simple_types import Resource
 
 @dataclass
 class Player:
@@ -10,7 +9,6 @@ class Player:
     activation_patterns: list[ActivationPattern]
     scoring_methods: list[ScoringMethod]
     grid: Grid
-    resources: dict[Resource, int]
     
     def __post_init__(self) -> None:
         if len(self.activation_patterns) != 2:

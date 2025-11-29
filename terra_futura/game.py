@@ -190,12 +190,13 @@ class Game(TerraFuturaInterface):
         if self._state != GameState.SelectReward:
             return
         
+        if self._selectReward.player != playerId:
+            return
+
         if not self._selectReward.canSelectReward(resource):
             return
         
         self._selectReward.selectReward(resource)
-        
-        self._players[playerId].resources[resource] += 1
         
         self._state = GameState.ActivateCard
         self._notifyObservers()
