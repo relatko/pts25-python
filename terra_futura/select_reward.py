@@ -4,6 +4,10 @@ from typing import List
 from .simple_types import Resource
 
 class SelectReward(InterfaceSelectReward):
+    def __init__(self) -> None:
+        pass
+
+
     def setReward(self, player: int, card: InterfaceCard, reward: List[Resource]) ->None:
         ...
     
