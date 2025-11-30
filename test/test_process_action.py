@@ -4,14 +4,36 @@ from terra_futura.process_action import ProcessAction
 from terra_futura.card import Card
 from terra_futura.arbitrary_basic import ArbitraryBasic
 from terra_futura.simple_types import Resource, GridPosition
+from terra_futura.interfaces import InterfaceGrid, InterfaceCard
+from typing import Optional, List
 
-
-class DummyGrid:
-    def __init__(self, mapping):
+class DummyGrid(InterfaceGrid):
+    def __init__(self, mapping) -> None:
         self.mapping = mapping
 
-    def getCard(self, position):
+    def getCard(self, position) -> Optional[InterfaceCard]:
         return self.mapping.get(position)
+    
+    def canPutCard(self, coordinate: GridPosition)-> bool:
+        return True
+
+    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> bool:
+        return True
+
+    def canBeActivated(self, coordinate: GridPosition)-> bool:
+        return True
+        
+    def setActivated(self, coordinate: GridPosition) -> None:
+        pass
+
+    def setActivationPattern(self, pattern: List[GridPosition]) -> None:
+        pass
+        
+    def endTurn(self) -> None:
+        pass
+
+    def state(self) -> str:
+        return ""
 
 
 def test_activate_card_inactive_returns_false() -> None:

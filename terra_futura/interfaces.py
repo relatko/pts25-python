@@ -1,7 +1,6 @@
 # pylint: disable=unused-argument, duplicate-code
 from typing import List, Tuple, Optional, Protocol
 from terra_futura.simple_types import *
-from terra_futura.player import Player
 
 from abc import ABC, abstractmethod
 from typing import List
@@ -181,8 +180,13 @@ class ProcessActionInterface(Protocol):
                      outputs: List[tuple[Resource, GridPosition]], 
                      pollution: List[GridPosition]) -> bool:
         ...
+
+class PlayerInterface(Protocol):
+    def getGrid(self) -> InterfaceGrid:
+        ...
+
 class ProcessActionAssistanceInterface(Protocol):
-    def activateCard(self, card: InterfaceCard, grid: InterfaceGrid, assistingPlayer: Player, 
+    def activateCard(self, card: InterfaceCard, grid: InterfaceGrid, assistingPlayer: PlayerInterface, 
                      assistingCard: InterfaceCard, inputs: List[tuple[Resource, GridPosition]], 
                      outputs: List[tuple[Resource, GridPosition]], 
                      pollution: List[GridPosition]) -> bool:
