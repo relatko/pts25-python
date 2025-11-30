@@ -48,13 +48,8 @@ class InterfaceCard(ABC):
         self.lowerEffect: Optional[Effect] = None
 
     # --- Interface methods ---
-
     @abstractmethod
-    def canGetResources(self, resources: List[Resource]) -> bool:
-        pass
-
-    @abstractmethod
-    def getResources(self, resources: List[Resource]) -> None:
+    def isActive(self) -> bool:
         pass
 
     @abstractmethod
@@ -63,6 +58,14 @@ class InterfaceCard(ABC):
 
     @abstractmethod
     def putResources(self, resources: List[Resource]) -> None:
+        pass
+
+    @abstractmethod
+    def canGetResources(self, resources: List[Resource]) -> bool:
+        pass
+
+    @abstractmethod
+    def getResources(self, resources: List[Resource]) -> None:
         pass
 
     @abstractmethod

@@ -19,17 +19,20 @@ class CardFake(InterfaceCard):
         self.lowerEffect: Optional[Effect] = None
 
     # --- Interface methods ---
-
-    def canGetResources(self, resources: List[Resource]) -> bool:
+#not used
+    def isActive(self) -> bool:
         return True
-
-    def getResources(self, resources: List[Resource]) -> None:
-        pass
 
     def canPutResources(self, resources: List[Resource]) -> bool:
         return True
 
     def putResources(self, resources: List[Resource]) -> None:
+        pass
+
+    def canGetResources(self, resources: List[Resource]) -> bool:
+        return True
+
+    def getResources(self, resources: List[Resource]) -> None:
         pass
 
     def check(self, input: List[Resource], output: List[Resource], pollution: int) -> bool:
