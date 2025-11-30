@@ -35,6 +35,13 @@ class CardFake(InterfaceCard):
     def getResources(self, resources: List[Resource]) -> None:
         pass
 
+    def canPlacePollution(self, amount: int = 1) -> None:
+        pass
+
+    def placePollution(self, amount: int = 1) -> None:
+        pass
+
+
     def check(self, input: List[Resource], output: List[Resource], pollution: int) -> bool:
         return True
 
