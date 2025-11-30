@@ -9,7 +9,7 @@ class ProcessAction(ProcessActionInterface):
                      pollution: list[GridPosition]) -> bool:
         """Checks whether the action is valid, and if so performs it."""
 
-        if not card.is_active:
+        if not card.isActive():
             return False
 
         #check pollution for each position

@@ -173,7 +173,7 @@ class Game(TerraFuturaInterface):
             if not self._processActionAssistance.activateCard(
                 card_obj,
                 grid,
-                otherPlayerId,
+                otherPlayer,
                 assisting_card,
                 inputs,
                 outputs,
