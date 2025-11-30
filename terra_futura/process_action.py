@@ -1,10 +1,10 @@
-from .card import Card
-from .grid import Grid
 from .simple_types import Resource, GridPosition
 from collections import Counter
+from .interfaces import ProcessActionInterface, InterfaceCard, InterfaceGrid
+from .card import Card
 
 class ProcessAction():
-    def activateCard(self, card: Card, grid: Grid, 
+    def activateCard(self, card: Card, grid: InterfaceGrid, 
                      inputs: list[tuple[Resource, GridPosition]], 
                      outputs: list[tuple[Resource, GridPosition]], 
                      pollution: list[GridPosition]) -> bool:

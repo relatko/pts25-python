@@ -1,7 +1,6 @@
 from terra_futura.interfaces import InterfaceGrid, InterfaceCard
 from typing import Optional, List
 from terra_futura.simple_types import *
-from .card import Card
 
 class Grid (InterfaceGrid):
     def __init__(self) ->None:
