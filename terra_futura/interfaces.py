@@ -1,6 +1,7 @@
 # pylint: disable=unused-argument, duplicate-code
 from typing import List, Tuple, Optional, Protocol
 from terra_futura.simple_types import *
+from terra_futura.player import Player
 
 from abc import ABC, abstractmethod
 from typing import List

@@ -1,9 +1,9 @@
 from .simple_types import Resource, GridPosition
 from collections import Counter
-from .interfaces import InterfaceGrid
+from .interfaces import InterfaceGrid, ProcessActionInterface
 from .card import Card
 
-class ProcessAction():
+class ProcessAction(ProcessActionInterface):
     def activateCard(self, card: Card, grid: InterfaceGrid, 
                      inputs: list[tuple[Resource, GridPosition]], 
                      outputs: list[tuple[Resource, GridPosition]], 
