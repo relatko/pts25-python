@@ -35,8 +35,8 @@ class CardFake(InterfaceCard):
     def getResources(self, resources: List[Resource]) -> None:
         pass
 
-    def canPlacePollution(self, amount: int = 1) -> None:
-        pass
+    def canPlacePollution(self, amount: int = 1) -> bool:
+        return False
 
     def placePollution(self, amount: int = 1) -> None:
         pass
@@ -82,8 +82,8 @@ class GridFake(InterfaceGrid):
     def endTurn(self) -> None:
         ...
 
-    def state(self) -> None:
-        ...
+    def state(self) -> str:
+        return ""
 
 class GridCannotPutCardFake(InterfaceGrid):
 #used
@@ -113,8 +113,8 @@ class GridCannotPutCardFake(InterfaceGrid):
     def endTurn(self) -> None:
         ...
 
-    def state(self) -> None:
-        ...
+    def state(self) -> str:
+        return ""
 
 class PileFake(InterfacePile):
     """Only gives the card information, does not change anything"""
@@ -131,7 +131,7 @@ class PileFake(InterfacePile):
         ...
 
     def state(self)-> str:
-        ...
+        return ""
 
 class PileUnableToGiveCardFake(InterfacePile):
     def getCard(self, index:int) ->Optional[InterfaceCard]:
@@ -144,7 +144,7 @@ class PileUnableToGiveCardFake(InterfacePile):
         ...
 
     def state(self)-> str:
-        ...
+        return ""
 
 
 class TestMoveCard(unittest.TestCase):
