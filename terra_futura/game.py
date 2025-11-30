@@ -1,27 +1,25 @@
 from typing import Optional
 from .player import Player
 from .simple_types import GameState, Deck, CardSource, GridPosition, Resource
-from .gameobserver import GameObserver
-from .interfaces import TerraFuturaInterface, InterfaceGrid, InterfacePile, InterfaceMoveCard
-from .process_action import ProcessAction
-from .process_action_assistance import ProcessActionAssistance
+from .interfaces import TerraFuturaInterface, GameObserverInterface, InterfacePile, InterfaceMoveCard, ProcessActionInterface, ProcessActionAssistanceInterface
 from .select_reward import SelectReward
+from .grid import Grid
 
 class Game(TerraFuturaInterface):
     _state: GameState
     _players: list[Player]
     _piles: dict[Deck, InterfacePile]
     _turnNumber: int = 0
-    _gameObserver: GameObserver
+    _gameObserver: GameObserverInterface
     _moveCard: InterfaceMoveCard
-    _processAction: ProcessAction
-    _processActionAssistance: ProcessActionAssistance
+    _processAction: ProcessActionInterface
+    _processActionAssistance: ProcessActionAssistanceInterface
     _selectReward: SelectReward
 
     def __init__(self, players: list[Player], piles: dict[Deck, InterfacePile], 
-                 moveCard: InterfaceMoveCard, processAction: ProcessAction, 
-                 processActionAssistance: ProcessActionAssistance, 
-                 selectReward: SelectReward, gameObserver: GameObserver) -> None:
+                 moveCard: InterfaceMoveCard, processAction: ProcessActionInterface, 
+                 processActionAssistance: ProcessActionAssistanceInterface, 
+                 selectReward: SelectReward, gameObserver: GameObserverInterface) -> None:
         
         
         if 4 < len(players) < 2:
@@ -70,7 +68,7 @@ class Game(TerraFuturaInterface):
         return self._players[self._onTurn].id
     
     def isPlayerOnTurn(self, playerId: int) -> bool:
-        return playerId == self._onTurn
+        return playerId == self.onTurn()
     
     def _advanceTurn(self) -> None:
         self._onTurn = (self._onTurn + 1) % len(self._players)
@@ -122,7 +120,11 @@ class Game(TerraFuturaInterface):
         if pile is None:
             return False
         
-        grid = self._players[playerId].grid
+        player = self._getPlayer(playerId)
+        if player is None:
+            return False
+        
+        grid = player.grid
 
         if not self._moveCard.moveCard(pile, cardIndex, destination, grid):
             return False
@@ -142,7 +144,11 @@ class Game(TerraFuturaInterface):
         if self._state != GameState.ActivateCard:
             return
         
-        grid = self._players[playerId].grid
+        player = self._getPlayer(playerId)
+        if player is None:
+            return
+        
+        grid = player.grid
         
         card_obj = grid.getCard(card)
         if card_obj is None:
@@ -153,9 +159,12 @@ class Game(TerraFuturaInterface):
             assert otherPlayerId != None # why do i need to assert?
             assert otherCard != None # why do i need to assert?
             
-            otherGrid = self._players[otherPlayerId]
+            otherPlayer = self._getPlayer(otherPlayerId)
+            if otherPlayer is None:
+                return
+            
+            otherGrid = otherPlayer.grid
 
-            assert isinstance(otherGrid, InterfaceGrid) # same here
             assisting_card = otherGrid.getCard(otherCard)
 
             if assisting_card is None:
@@ -186,14 +195,18 @@ class Game(TerraFuturaInterface):
         
         self._notifyObservers()
 
-    def selectReward(self, playerId: int, resource: Resource):
+    def selectReward(self, playerId: int, resource: Resource) -> None:
         if self._state != GameState.SelectReward:
             return
         
+        if self._selectReward.player != playerId:
+            return
+
         if not self._selectReward.canSelectReward(resource):
             return
         
         self._selectReward.selectReward(resource)
+        
         self._state = GameState.ActivateCard
         self._notifyObservers()
         return
@@ -205,20 +218,30 @@ class Game(TerraFuturaInterface):
         if self._state != GameState.ActivateCard:
             return False
         
-        grid = self._players[playerId].grid
+        player = self._getPlayer(playerId)
+        if player is None:
+            return False
+        grid = player.grid
+
         grid.endTurn()
         
-        if self._turnNumber <= 9:
-            self._advanceTurn()
+        if self._turnNumber < 9:
             self._state = GameState.TakeCardNoCardDiscarded
-        else:
-            # End game turns
+            self._advanceTurn()
+        elif self._turnNumber == 9:
+            # Last regular turn
             self._advanceTurn()
             if self._onTurn == 0:
                 self._state = GameState.SelectActivationPattern
             else:
                 self._state = GameState.TakeCardNoCardDiscarded
-        
+        else:
+            self._advanceTurn()
+            if self._onTurn == 0:
+                self._state = GameState.SelectScoringMethod
+            else:
+                self._state = GameState.ActivateCard
+
         self._notifyObservers()
         return True
 
@@ -232,8 +255,35 @@ class Game(TerraFuturaInterface):
         if card not in {0, 1}:
             return False
         
-        self._players[playerId].activation_patterns[card].select()
+        player = self._getPlayer(playerId)
+        if player is None:
+            return False
+        player.activation_patterns[card].select()
         self._state = GameState.ActivateCard
         
+        self._notifyObservers()
+        return True
+
+    def selectScoring(self, playerId: int, card: int) -> bool:
+        if not self.isPlayerOnTurn(playerId):
+            return False
+        
+        if self._state != GameState.SelectScoringMethod:
+            return False
+        
+        if card not in {0, 1}:
+            return False
+        
+        player = self._getPlayer(playerId)
+        if player is None:
+            return False
+
+        scoring_method = player.scoring_methods[card]
+        scoring_method.selectThisMethodAndCalculate()
+
+        self._advanceTurn()
+        if self._onTurn == 0:
+            self._state = GameState.Finish
+
         self._notifyObservers()
         return True
