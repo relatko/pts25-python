@@ -40,7 +40,7 @@ class ProcessAction():
             output_card_position = next(iter(outputs_grouped))
             outputs_resources = outputs_grouped[output_card_position]
             output_card: Card = grid.getCard(output_card_position)
-            if output_card != card or not card.canPutResources(outputs_resources):
+            if output_card.state() != card.state() or not card.canPutResources(outputs_resources):
                 return False
 
         inputs_resources: list[Resource] = [input[0] for input in inputs]
