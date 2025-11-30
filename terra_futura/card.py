@@ -59,7 +59,7 @@ class Card(InterfaceCard):
     def isActive(self) -> bool:
         return self.is_active
 
-    def can_place_pollution(self, amount: int = 1) -> bool:
+    def canPlacePollution(self, amount: int = 1) -> bool:
         """
         Check if it is legal to place `amount` new pollution cubes
         on this card, according to the rule:
@@ -82,7 +82,7 @@ class Card(InterfaceCard):
         
         return True
 
-    def place_pollution(self, amount: int = 1) -> None:
+    def placePollution(self, amount: int = 1) -> None:
         """
         Place `amount` new pollution cubes on this card.
 
@@ -96,7 +96,7 @@ class Card(InterfaceCard):
         if amount == 0:
             return
 
-        if not self.can_place_pollution(amount):
+        if not self.canPlacePollution(amount):
             raise ValueError("Cannot place pollution on an inactive card.")
 
         free_slots = self.pollutionSpacesL - self._pollution

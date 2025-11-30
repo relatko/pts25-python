@@ -69,6 +69,16 @@ class InterfaceCard(ABC):
         pass
 
     @abstractmethod
+    def canPlacePollution(self, amount: int = 1) -> bool:
+        """Return True if placing `amount` pollution on this card is legal."""
+        pass
+
+    @abstractmethod
+    def placePollution(self, amount: int = 1) -> None:
+        """Place `amount` pollution cubes on this card."""
+        pass
+
+    @abstractmethod
     def check(self, input: List[Resource], output: List[Resource], pollution: int) -> bool:
         pass
 
