@@ -29,6 +29,8 @@ class GridFake(InterfaceGrid):
             card = CardFake(1, TransformationFixed([], [Resource.GREEN], 0))
             card.putResources([Resource.RED, Resource.RED, Resource.MONEY, Resource.CONSTRUCTION, Resource.RED])
             return card
+        
+        return None
 
     def canPutCard(self, coordinate: GridPosition)-> bool:
         if(coordinate.x >2):
@@ -51,8 +53,8 @@ class GridFake(InterfaceGrid):
     def endTurn(self) -> None:
         ...
 
-    def state(self) -> None:
-        ...
+    def state(self) -> str:
+        return ""
 
 class CardFake(InterfaceCard):
     """
@@ -216,8 +218,8 @@ class CardFake(InterfaceCard):
         # Multiset removal
         wanted = Counter(resources)
         new_contents: List[Resource] = []
-        current = Counter()
-
+        current: Counter[Resource] = Counter()
+        
         for r in self.resources:
             # Keep this resource if we have already removed enough of that type
             if current[r] < wanted[r]:
