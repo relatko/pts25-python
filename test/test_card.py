@@ -67,31 +67,31 @@ def test_new_card_is_active_and_clean():
     assert c.pollution == 0
 
 
-def test_place_pollution_fills_slots_then_center_and_deactivates():
+def test_placePollution_fills_slots_then_center_and_deactivates():
     c = Card(pollutionSpacesL=3)
 
     # First cube: goes to slots
-    c.place_pollution(1)
+    c.placePollution(1)
     assert c.pollution == 1
     assert c.is_active is True
 
     # Next 2 cubes:
     # - one fills last free slot
     # - one goes to center, card becomes inactive
-    c.place_pollution(2)
+    c.placePollution(2)
     assert c.pollution == 3
     assert c.is_active is False
 
 
-def test_cannot_place_pollution_on_inactive_card():
+def test_cannot_placePollution_on_inactive_card():
     c = Card(pollutionSpacesL=1)
 
     # First cube goes directly to center -> inactive
-    c.place_pollution(1)
+    c.placePollution(1)
     assert c.is_active is False
 
     with pytest.raises(ValueError):
-        c.place_pollution(1)  # cannot place on inactive card
+        c.placePollution(1)  # cannot place on inactive card
 
 def test_cannot_place_too_much_pollution():
     c = Card(pollutionSpacesL=5)
@@ -99,7 +99,7 @@ def test_cannot_place_too_much_pollution():
     # First cube goes directly to center -> inactive
 
     with pytest.raises(ValueError):
-        c.place_pollution(69)  # cannot place on inactive card
+        c.placePollution(69)  # cannot place on inactive card
 
 
 # ---------------------------------------------------------------------------
@@ -118,7 +118,7 @@ def test_get_resources_on_active_card():
 
 def test_get_resources_on_inactive_card_fails():
     c = Card(pollutionSpacesL=1)
-    c.place_pollution(1)  # now inactive
+    c.placePollution(1)  # now inactive
 
     r = DummyResource("wood")
     assert c.canPutResources([r]) is False
@@ -140,7 +140,7 @@ def test_can_put_resources_checks_multiset_and_activity():
     assert c.canGetResources([r1, r1, r1]) is False
 
     # Make card inactive -> cannot pay anything
-    c.place_pollution(1)
+    c.placePollution(1)
     assert c.is_active is False
     assert c.canGetResources([r1]) is False
 
@@ -201,7 +201,7 @@ def test_check_does_not_call_effect_if_card_inactive():
     c.putResources([w])
 
     # make card inactive
-    c.place_pollution(1)
+    c.placePollution(1)
     assert c.is_active is False
 
     result = c.check(input=[w], output=[reward], pollution=0)
@@ -269,7 +269,7 @@ def test_state_contains_basic_info():
     w = DummyResource("wood")
 
     c.putResources([w])
-    c.place_pollution(1)
+    c.placePollution(1)
 
     s = c.state()
 
@@ -278,7 +278,7 @@ def test_state_contains_basic_info():
     assert "pollution=1/3" in s
 
     # now deactivate
-    c.place_pollution(2)
+    c.placePollution(2)
     s2 = c.state()
     assert "inactive" in s2
 

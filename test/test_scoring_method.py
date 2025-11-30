@@ -22,7 +22,7 @@ class GridFake(InterfaceGrid):
         if coordinate == GridPosition(1,0):
             card = CardFake(1, TransformationFixed([], [Resource.GREEN], 1))
             card.putResources([Resource.FOOD, Resource.CONSTRUCTION, Resource.GOODS])
-            card.place_pollution(1)
+            card.placePollution(1)
             return card
         
         if coordinate == GridPosition(2,0):
@@ -109,7 +109,7 @@ class CardFake(InterfaceCard):
     def isActive(self) -> bool:
         return self.is_active
 
-    def can_place_pollution(self, amount: int = 1) -> bool:
+    def canPlacePollution(self, amount: int = 1) -> bool:
         """
         Check if it is legal to place `amount` new pollution cubes
         on this card, according to the rule:
@@ -132,7 +132,7 @@ class CardFake(InterfaceCard):
         
         return True
 
-    def place_pollution(self, amount: int = 1) -> None:
+    def placePollution(self, amount: int = 1) -> None:
         """
         Place `amount` new pollution cubes on this card.
 
@@ -146,7 +146,7 @@ class CardFake(InterfaceCard):
         if amount == 0:
             return
 
-        if not self.can_place_pollution(amount):
+        if not self.canPlacePollution(amount):
             raise ValueError("Cannot place pollution on an inactive card.")
 
         free_slots = self.pollutionSpacesL - self._pollution
@@ -251,7 +251,7 @@ class CardFake(InterfaceCard):
             return False
 
         # Can this card accept the resulting pollution?
-        if not self.can_place_pollution(pollution):
+        if not self.canPlacePollution(pollution):
             return False
 
         # Delegate detailed IO check to the effect itself
@@ -270,7 +270,7 @@ class CardFake(InterfaceCard):
         if not self.canGetResources(input):
             return False
 
-        if not self.can_place_pollution(pollution):
+        if not self.canPlacePollution(pollution):
             return False
 
         return self.lowerEffect.check(input, output, pollution)
