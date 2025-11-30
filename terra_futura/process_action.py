@@ -34,9 +34,13 @@ class ProcessAction():
         outputs_grouped: dict[GridPosition, list[Resource]] = {}
         for resource, position in outputs:
             outputs_grouped.setdefault(position, []).append(resource)
-        for position, resources in outputs_grouped.items():
-            resourceCard = grid.getCard(position)
-            if resourceCard is None or not resourceCard.canPutResources(resources):
+        if len(outputs_grouped) > 1:
+            return False
+        elif len(outputs_grouped) == 1:
+            output_card_position = next(iter(outputs_grouped))
+            outputs_resources = outputs_grouped[output_card_position]
+            output_card: Card = grid.getCard(output_card_position)
+            if output_card != card or not card.canPutResources(outputs_resources):
                 return False
 
         inputs_resources: list[Resource] = [input[0] for input in inputs]
