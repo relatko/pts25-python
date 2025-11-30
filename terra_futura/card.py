@@ -172,7 +172,7 @@ class Card(InterfaceCard):
         # Multiset removal
         wanted = Counter(resources)
         new_contents: List[Resource] = []
-        current = Counter(Resource)
+        current: Counter[Resource] = Counter()
 
         for r in self.resources:
             # Keep this resource if we have already removed enough of that type
