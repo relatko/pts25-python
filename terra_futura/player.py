@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from .activation_pattern import ActivationPattern
 from .scoring_method import ScoringMethod
 from .grid import Grid
-from .simple_types import Resource
 
 @dataclass
 class Player:
