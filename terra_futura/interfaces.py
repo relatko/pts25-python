@@ -182,7 +182,7 @@ class ProcessActionInterface(Protocol):
                      pollution: List[GridPosition]) -> bool:
         ...
 class ProcessActionAssistanceInterface(Protocol):
-    def activateCard(self, card: InterfaceCard, grid: InterfaceGrid, assistingPlayer: int, 
+    def activateCard(self, card: InterfaceCard, grid: InterfaceGrid, assistingPlayer: Player, 
                      assistingCard: InterfaceCard, inputs: List[tuple[Resource, GridPosition]], 
                      outputs: List[tuple[Resource, GridPosition]], 
                      pollution: List[GridPosition]) -> bool:

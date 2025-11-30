@@ -1,12 +1,11 @@
 from .simple_types import Resource, GridPosition
-from .interfaces import ProcessActionAssistanceInterface, InterfaceGrid
+from .interfaces import ProcessActionAssistanceInterface, InterfaceGrid, InterfaceCard
 from collections import Counter
-from .card import Card
 from .player import Player
 
 class ProcessActionAssistance(ProcessActionAssistanceInterface):
-    def activateCard(self, card: Card, grid: InterfaceGrid, assistingPlayer: Player, 
-                     assistingCard: Card, inputs: list[tuple[Resource, GridPosition]], 
+    def activateCard(self, card: InterfaceCard, grid: InterfaceGrid, assistingPlayer: Player, 
+                     assistingCard: InterfaceCard, inputs: list[tuple[Resource, GridPosition]], 
                      outputs: list[tuple[Resource, GridPosition]], 
                      pollution: list[GridPosition]) -> bool:
         
