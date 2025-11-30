@@ -13,8 +13,8 @@ class GridFake(InterfaceGrid):
     def setActivationPattern(self, pattern: List[GridPosition]) -> None:
         self.activations_received = pattern
 
-    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> None:
-        ... 
+    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> bool:
+        return False
     
 # Has to return something
     def getCard(self, coordinate: GridPosition) -> Optional[InterfaceCard]:
@@ -32,8 +32,8 @@ class GridFake(InterfaceGrid):
     def endTurn(self) -> None:
         ...
 
-    def state(self) -> None:
-        ...
+    def state(self) -> str:
+        return ""
 
 def create_grid_positions_from_tuples(tuples: List[Tuple[int, int]]) -> List[GridPosition]:
     """Converts the test tuple patterns into the required GridPosition objects."""
