@@ -1,8 +1,7 @@
 import unittest
 import json
-from card import Card, Deck, StartingCard
-from select_reward import Resource
-
+from card import Card, StartingCard
+from enumeration_classes import Resource, Deck
 
 class TestCard(unittest.TestCase):
     def setUp(self) -> None:
