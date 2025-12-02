@@ -1,11 +1,6 @@
-from enum import Enum
 from typing import List, Optional
-from select_reward import Resource
+from enumeration_classes import Deck, Resource
 import json
-
-class Deck(Enum):
-    I = "I"
-    II = "II"
 
 class Card:
     def __init__(self, name: str, level: Deck, output: Resource, input: Optional[List[Resource]] = None, pollution: int = 0,
